@@ -15,7 +15,6 @@ const router = express.Router();
 
 router.post("/", async (req, res) => {
 	try {
-		console.log(req.body);
 		const validateErrorMessage = validateRegistration(req.body);
 		if (validateErrorMessage !== "") {
 			return handleError(res, 400, "Validation" + validateErrorMessage);

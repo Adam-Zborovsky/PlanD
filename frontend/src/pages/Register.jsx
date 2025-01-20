@@ -211,7 +211,7 @@ function Register() {
 						>
 							Register
 						</button>
-						<Link to="/login" className="secondary-link">
+						<Link to="/" className="secondary-link">
 							Already have an account? Login
 						</Link>
 					</div>

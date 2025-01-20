@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "../styles/CalenderModal.css";
+import { AuthContext } from "../context/AuthContext";
+import { addDate } from "../Services/dateService";
 
 function CalenderModal({ setIsHome, showModal, setShowModal }) {
 	const [selectedDates, setSelectedDates] = useState([]);
+	const { userData } = useContext(AuthContext);
 
 	const getDatesInRange = (startDate, endDate) => {
 		const date = new Date(startDate.getTime());
@@ -19,21 +22,11 @@ function CalenderModal({ setIsHome, showModal, setShowModal }) {
 	};
 
 	const handleDateChange = (date) => {
-		const formatDate = (date) => {
-			return date.toLocaleDateString("en-US", {
-				weekday: "long",
-				day: "2-digit",
-				month: "long",
-			});
-		};
-
 		if (Array.isArray(date)) {
 			const [startDate, endDate] = date;
-			const allDates = getDatesInRange(startDate, endDate);
-			const formattedDates = allDates.map(formatDate);
-			setSelectedDates(formattedDates);
+			setSelectedDates(getDatesInRange(startDate, endDate));
 		} else {
-			setSelectedDates([formatDate(date)]);
+			setSelectedDates([date]);
 		}
 	};
 
@@ -42,7 +35,12 @@ function CalenderModal({ setIsHome, showModal, setShowModal }) {
 	};
 
 	const saveDates = () => {
-		console.log("Selected Dates:", selectedDates);
+		selectedDates.forEach((date) => {
+			addDate(userData._id, new Date(date).toISOString())
+				.then((res) => console.log(res))
+				.catch((err) => console.log(err));
+		});
+
 		setShowModal(false);
 		setIsHome(true);
 	};

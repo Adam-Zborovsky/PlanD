@@ -1,10 +1,30 @@
 const mongoose = require("mongoose");
-const Name = require("../../../helpers/mongodb/Name");
-const EMAIL = require("../../../helpers/mongodb/mongooseValidators");
+const { DEFAULT_VALIDATION } = require("../../../helpers/defaultValidator");
 
 const userSchema = new mongoose.Schema({
-	name: Name,
-	email: EMAIL,
+	name: {
+		first: DEFAULT_VALIDATION,
+		middle: {
+			...DEFAULT_VALIDATION,
+			required: false,
+			minLength: 0,
+		},
+		last: DEFAULT_VALIDATION,
+	},
+	email: {
+		type: String,
+		required: [true, "Email is required"],
+		trim: true,
+		unique: true,
+		lowercase: true,
+		validate: {
+			validator: (value) =>
+				/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/.test(
+					value
+				),
+			message: "Invalid email format",
+		},
+	},
 	password: {
 		type: String,
 		required: true,
@@ -24,19 +44,6 @@ const userSchema = new mongoose.Schema({
 			lowercase: true,
 		},
 	},
-	dates: [
-		{
-			type: Date,
-			required: true,
-		},
-	],
-	ideas: [
-		{
-			date: { type: Date, required: true },
-			content: { type: String, required: true },
-			votes: { type: Number, default: 0 },
-		},
-	],
 	isAdmin: { type: Boolean, default: false },
 	createdAt: {
 		type: Date,
