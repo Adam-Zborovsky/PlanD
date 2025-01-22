@@ -7,6 +7,7 @@
 	--color-primary: #7a49ff;
 	--color-accent: #f491ea;
 }
+
 html,
 body {
 	margin: 0;
@@ -15,6 +16,28 @@ body {
 	background-color: var(--color-bg) !important;
 	color: var(--color-text) !important;
 }
+
 input::placeholder {
 	color: var(--color-text) !important;
+}
+
+.btn-primary {
+	background-color: var(--color-primary) !important;
+	border: var(--color-border) !important;
+}
+
+.btn-outline-primary {
+	border-color: var(--color-primary) !important;
+	color: var(--color-primary) !important;
+}
+
+
+.date-card {
+	transition: transform 0.3s ease-in-out;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.date-card:hover {
+	cursor: pointer;
+	transform: translateY(-5px);
 }

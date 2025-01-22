@@ -73,12 +73,12 @@ function Register() {
 						navigate("/");
 					}
 				})
-				.catch((err) => toast.error(err.response.data));
+				.catch((err) => toast.error(err.response?.data));
 		},
 	});
 
 	return (
-		<div className="register-container d-flex justify-content-center align-items-center">
+		<div className="register-container d-flex justify-content-center align-items-center" style={{ height: "100vh", marginTop: "10vh", gap: "5vh" }}>
 			<div className="card register-card p-4">
 				<form onSubmit={formik.handleSubmit} className="register-form">
 					<h3 className="form-title">Register</h3>

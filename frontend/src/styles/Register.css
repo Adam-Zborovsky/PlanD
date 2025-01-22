@@ -3,13 +3,13 @@
 }
 
 .register-card {
-	width: 90%;
+	width: 80%;
 	max-width: 500px;
 	background-color: var(--color-surface);
 	border: none;
 	color: var(--color-text);
 	border-radius: 8px;
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
 .form-section {

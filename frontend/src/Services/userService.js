@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const apiURL = "http://localhost:8181/users/";
+const apiURL = "http://192.168.1.117:8181/users/";
 
 export function loginUser(user) {
 	let config = {
@@ -55,7 +55,7 @@ export function registerUser(user) {
 		});
 }
 
-export function updateUser(user, id) {
+export function updateUser(id, user) {
 	let config = {
 		method: "put",
 		maxBodyLength: Infinity,
@@ -67,3 +67,4 @@ export function updateUser(user, id) {
 	};
 	return axios.request(config);
 }
+

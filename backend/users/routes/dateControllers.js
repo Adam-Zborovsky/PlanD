@@ -2,12 +2,16 @@ const express = require("express");
 const auth = require("../../auth/authService");
 const router = express.Router();
 const { handleError } = require("../../utils/handleErrors");
-const User = require("../../users/models/mongodb/User");
+const User = require("../models/mongodb/User");
+const { getUser } = require("../models/userAccessDataService");
 
+// Add a date to a user's list of available dates
 router.post("/:userId", async (req, res) => {
 	try {
 		const { userId } = req.params;
 		const { date } = req.body;
+		console.log(date);
+
 
 		const user = await User.findById(userId);
 		if (!user) return res.status(404).send("User not found");
@@ -25,18 +29,34 @@ router.post("/:userId", async (req, res) => {
 	}
 });
 
-router.post("/:userId/idea", auth, async (req, res) => {
+//get dates of a user
+router.get("/:userId", auth, async (req, res) => {
 	try {
 		const { userId } = req.params;
-		const { date, content } = req.body;
 
-		const user = await User.findById(userId);
+		const user = await getUser(userId);
 		if (!user) return res.status(404).send("User not found");
 
-		user.ideas.push({ date, content, votes: 0 });
+		res.status(201).send(user.dates);
+	} catch (error) {
+		handleError(res, 500, error.message);
+	}
+});
+
+// Update dates of a user
+router.patch("/:userId", auth, async (req, res) => {
+	try {
+		const { userId } = req.params;
+		const dateToDel = req.body.date;
+
+
+		const user = await getUser(userId);
+		if (!user) return res.status(404).send("User not found");
+
+		user.dates = user.dates.filter((date) => date !== dateToDel);
 		await user.save();
 
-		res.status(201).send(user.ideas);
+		res.status(200).send(user.dates);
 	} catch (error) {
 		handleError(res, 500, error.message);
 	}

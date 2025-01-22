@@ -1,6 +1,16 @@
+.custom-calendar .modal-content {
+	border-radius: 15px !important;
+	background-color: var(--color-bg) !important;
+	color: var(--color-text) !important;
+	max-width: 80vw;
+	margin: 0 auto;
+}
+
 .react-calendar {
+	width: 80vw;
 	background: var(--color-surface) !important;
 	border: 1px solid var(--color-border) !important;
+	border-radius: 10px !important;
 	color: var(--color-text) !important;
 	font-family: var(--font-family-base) !important;
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -9,6 +19,7 @@
 .react-calendar__navigation button {
 	color: var(--color-text) !important;
 	background: var(--color-primary) !important;
+	border-radius: 10px !important;
 	border: none;
 	margin: 5px;
 	padding: 5px 10px;
@@ -46,4 +57,14 @@
 
 .react-calendar__month-view__days__day--weekend {
 	color: var(--color-accent) !important;
+}
+
+.react-calendar .weekend {
+	color: var(--color-accent) !important;
+	border-radius: 8px;
+}
+
+.react-calendar .weekday {
+	color: #fff !important;
+	border-radius: 8px;
 }

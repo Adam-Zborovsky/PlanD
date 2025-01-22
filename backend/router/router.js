@@ -1,13 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const userRouterController = require("../users/routes/userControllers.js");
-const dateController = require("../dates/routes/dateController.js");
-const ideaController = require("../ideas/routes/ideaController.js");
+const dateRouterController = require("../users/routes/dateControllers.js");
+const ideaRouterController = require("../users/routes/ideaControllers.js");
 const { handleError } = require("../utils/handleErrors");
 
 router.use("/users", userRouterController);
-router.use("/dates", dateController);
-router.use("/ideas", ideaController);
+router.use("/dates", dateRouterController);
+router.use("/ideas", ideaRouterController);
 
 router.use((req, res) => {
 	handleError(res, 404, "Path not found");

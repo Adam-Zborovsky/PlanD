@@ -44,6 +44,19 @@ const userSchema = new mongoose.Schema({
 			lowercase: true,
 		},
 	},
+	dates: [
+		{
+			type: String,
+			required: true,
+		},
+	], ideas: [
+		{
+			date: { type: String, required: true },
+			content: { type: String, required: true },
+			votes: { type: Number, default: 0 },
+			favorite: { type: Boolean }
+		},
+	],
 	isAdmin: { type: Boolean, default: false },
 	createdAt: {
 		type: Date,
