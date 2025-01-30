@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { FaBars } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import "../styles/Navbar.css";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 const NavBar = () => {
+	const { logout, isAuthenticated } = useContext(AuthContext);
 	const [isOpen, setIsOpen] = useState(false);
 
 	const toggleNav = () => {
@@ -23,14 +25,23 @@ const NavBar = () => {
 					<IoClose color="var(--color-text)" size={24} />
 				</button>
 				<ul className="nav-links">
-					<li>
-						<Link to="/" />
-						Home
+					<li className="nav-item">
+						<Link className="nav-link" to="/">
+							Home
+						</Link>
 					</li>
-					<li>
-						<Link to="/profile" />
-						Profile
+					<li className="nav-item">
+						<Link className="nav-link" to="/profile">
+							Profile
+						</Link>
 					</li>
+					{isAuthenticated && (
+						<li className="nav-item">
+							<button className="nav-link" onClick={logout}>
+								Logout
+							</button>
+						</li>
+					)}
 				</ul>
 				<div className="social-links">
 					<span>Facebook</span>

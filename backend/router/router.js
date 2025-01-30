@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const userRouterController = require("../users/routes/userControllers.js");
 const dateRouterController = require("../users/routes/dateControllers.js");
-const ideaRouterController = require("../users/routes/ideaControllers.js");
+const ideaRouterController = require("../ideas/routes/ideaControllers.js");
 const { handleError } = require("../utils/handleErrors");
 
 router.use("/users", userRouterController);

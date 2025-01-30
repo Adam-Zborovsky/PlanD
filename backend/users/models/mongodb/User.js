@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema({
 		trim: true,
 	},
 	image: {
-		url: {
+		path: {
 			type: String,
 			maxLength: 256,
 			trim: true,
@@ -48,13 +48,6 @@ const userSchema = new mongoose.Schema({
 		{
 			type: String,
 			required: true,
-		},
-	], ideas: [
-		{
-			date: { type: String, required: true },
-			content: { type: String, required: true },
-			votes: { type: Number, default: 0 },
-			favorite: { type: Boolean }
 		},
 	],
 	isAdmin: { type: Boolean, default: false },

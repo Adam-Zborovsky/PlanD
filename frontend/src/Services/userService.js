@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const apiURL = "http://192.168.1.117:8181/users/";
+const apiURL = process.env.REACT_APP_API_URL + "/users/";
 
 export function loginUser(user) {
 	let config = {
@@ -16,15 +16,15 @@ export function loginUser(user) {
 	return axios.request(config);
 }
 
-export function registerUser(user) {
-	let config = {
+export function registerUser(formData) {
+	const config = {
 		method: "post",
 		maxBodyLength: Infinity,
 		url: apiURL,
 		headers: {
-			"Content-Type": "application/json",
+			"Content-Type": "multipart/form-data",
 		},
-		data: user,
+		data: formData,
 	};
 
 	return axios
@@ -32,27 +32,42 @@ export function registerUser(user) {
 		.then((res) => {
 			console.log("res", res);
 
-			if (res.status === 200) {
-				console.log("email:" + user.email, " password:" + user.password);
-
-				let loginConfig = {
+			if (res.status === 201) {
+				const loginConfig = {
 					method: "post",
 					maxBodyLength: Infinity,
-					url: apiURL + "login",
+					url: `${apiURL}login`,
 					headers: {
 						"Content-Type": "application/json",
 					},
-					data: { email: user.email, password: user.password },
+					data: {
+						email: formData.get("email"),
+						password: formData.get("password"),
+					},
 				};
 
 				return axios.request(loginConfig);
 			}
+
 			return res;
 		})
 		.catch((err) => {
 			console.error(err);
 			throw err;
 		});
+}
+
+export function getUser(id) {
+	console.log(id);
+	let config = {
+		method: "get",
+		maxBodyLength: Infinity,
+		url: apiURL + id,
+		headers: {
+			"x-auth-token": localStorage.getItem("token"),
+		},
+	};
+	return axios.request(config);
 }
 
 export function updateUser(id, user) {
@@ -68,3 +83,14 @@ export function updateUser(id, user) {
 	return axios.request(config);
 }
 
+export function deleteUser(id) {
+	let config = {
+		method: "delete",
+		maxBodyLength: Infinity,
+		url: apiURL + id,
+		headers: {
+			"x-auth-token": localStorage.getItem("token"),
+		},
+	};
+	return axios.request(config);
+}

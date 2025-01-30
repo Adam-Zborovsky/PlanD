@@ -19,7 +19,7 @@
 	top: 0;
 	left: -75%;
 	height: 100%;
-	width: 75%;
+	width: 300px;
 	background-color: var(--color-surface);
 	color: var(--color-text);
 	padding: 20px;
@@ -44,9 +44,9 @@
 	margin: 0;
 }
 
-.nav-links Link {
+.nav-link {
 	margin: 20px 0;
-	font-size: 18px;
+	font-size: 1.3rem;
 	cursor: pointer;
 }
 

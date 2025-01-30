@@ -13,6 +13,9 @@ export const AuthProvider = ({ children }) => {
 		if (token) {
 			setIsAuthenticated(true);
 			setUserData(jwtDecode(token));
+		} else {
+			setIsAuthenticated(false);
+			setUserData({});
 		}
 	}, []);
 
@@ -33,7 +36,6 @@ export const AuthProvider = ({ children }) => {
 		const token = localStorage.getItem("token");
 		if (token != null) {
 			setUserData({ ...setUserData(jwtDecode(token)), dates: { datesIsHome } });
-			toast.success("Log out successfully");
 		}
 	};
 

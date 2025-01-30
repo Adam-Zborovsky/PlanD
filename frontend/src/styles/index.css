@@ -21,6 +21,12 @@ input::placeholder {
 	color: var(--color-text) !important;
 }
 
+button {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
 .btn-primary {
 	background-color: var(--color-primary) !important;
 	border: var(--color-border) !important;
@@ -30,7 +36,6 @@ input::placeholder {
 	border-color: var(--color-primary) !important;
 	color: var(--color-primary) !important;
 }
-
 
 .date-card {
 	transition: transform 0.3s ease-in-out;

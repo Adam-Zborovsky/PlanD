@@ -1,7 +1,10 @@
 const { generateAuthToken } = require("../../auth/providers/jwt");
 const { createError } = require("../../utils/handleErrors");
-const { generatePassword, comparePasswords } = require("../helpers/bcrypt");
-const User = require("./mongodb/User");
+const {
+	generatePassword,
+	comparePasswords,
+} = require("../../users/helpers/bcrypt");
+const User = require("../../users/models/mongodb/User");
 
 const registerUser = async (newUser) => {
 	try {
@@ -20,6 +23,13 @@ const registerUser = async (newUser) => {
 const getUser = async (UserId) => {
 	try {
 		let user = await User.findById(UserId);
+		user = {
+			_id: user._id,
+			name: user.name,
+			email: user.email,
+			Image: user.image,
+			dates: user.dates,
+		};
 		return user;
 	} catch (error) {
 		return createError("Mongoose", error);
@@ -66,4 +76,13 @@ const updateUser = async (id, updateData) => {
 	}
 };
 
-module.exports = { registerUser, getUser, loginUser, updateUser };
+const deleteUser = async (id) => {
+	try {
+		const user = await User.findByIdAndDelete(id);
+		return user;
+	} catch (error) {
+		throw { status: 400, message: "Delete failed" };
+	}
+};
+
+module.exports = { registerUser, getUser, loginUser, updateUser, deleteUser };

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const apiURL = "http://192.168.1.117:8181/dates/";
+const apiURL = process.env.REACT_APP_API_URL + "/dates/";
 
 export function addDate(id, date) {
 	let config = {
@@ -35,7 +35,7 @@ export function DeleteDate(id, date) {
 		headers: {
 			"x-auth-token": localStorage.getItem("token"),
 		},
-		data: { date }
+		data: { date },
 	};
 	return axios.request(config);
 }
