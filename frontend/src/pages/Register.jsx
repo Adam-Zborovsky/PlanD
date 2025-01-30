@@ -81,7 +81,7 @@ function Register() {
 
 	return (
 		<div
-			className="register-container d-flex justify-content-center align-items-center"
+			className="register-container d-flex justify-content-center align-items-start"
 			style={{ height: "100vh", marginTop: "10vh", gap: "5vh" }}
 		>
 			<div className="card register-card p-4">

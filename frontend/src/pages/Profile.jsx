@@ -1,18 +1,3 @@
-/*
- Example shape of user in the database:
-
- {
-   _id: new ObjectId('6796b8ed3d3262cbee45a6d6'),
-   name: { first: 'adam', middle: '', last: 'zborovsky' },
-   email: 'adamzborovsky@gmail.com',
-   Image: {
-     path: '/uploads/adamzborovsky@gmail.com.png',
-     alt: 'adam zborovsky'
-   },
-   dates: [ 'Friday 24 Jan 2025', 'Saturday 25 Jan 2025' ]
- }
-*/
-
 import React, { useState, useContext, useRef, useEffect } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
@@ -98,15 +83,6 @@ function Profile() {
 			setIsEditing(false);
 		},
 	});
-
-	useEffect(() => {
-		formik.setValues({
-			firstName: user?.name?.first || "",
-			middleName: user?.name?.middle || "",
-			lastName: user?.name?.last || "",
-			email: user?.email || "",
-		});
-	}, [user]);
 
 	const handleDelete = async () => {
 		try {
