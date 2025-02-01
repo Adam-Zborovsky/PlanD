@@ -50,7 +50,9 @@ function CalenderModal({ showModal, setShowModal }) {
 		selectedDates.forEach((date) => {
 			addDate(userData._id, date)
 				.then((res) => {
-					console.log(res);
+					updateUser(userData._id, { isHome: isHome })
+						.then((updateRes) => change())
+						.catch((updateErr) => toast.error(updateErr.response?.data));
 					setTimeout(() => {
 						window.location.reload();
 					}, 1000);
