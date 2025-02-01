@@ -49,11 +49,16 @@ function CalenderModal({ showModal, setShowModal }) {
 	const saveDates = () => {
 		selectedDates.forEach((date) => {
 			addDate(userData._id, date)
-				.then((res) => console.log(res))
+				.then((res) => {
+					console.log(res);
+					setTimeout(() => {
+						window.location.reload();
+					}, 1000);
+				})
+
 				.catch((err) => toast.error(err.response?.data));
 		});
 		setShowModal(false);
-		window.location.reload();
 	};
 	const highlightWeekends = ({ date }) => {
 		const day = date.getDay();
