@@ -93,7 +93,7 @@ function Home() {
 		setSelectedImageUrl(`${process.env.REACT_APP_API_URL}${imagePath}`);
 		setShowImageModal(true);
 	};
-
+	console.log(userData?.isHome);
 	return (
 		<div
 			className="container d-flex flex-column align-items-center"
