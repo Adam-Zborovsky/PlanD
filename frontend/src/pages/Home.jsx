@@ -8,9 +8,11 @@ import ConfirmModal from "../components/ConfirmModal";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { ChangeContext } from "../context/ChangeContext";
+import { updateUser } from "../Services/userService";
+import ImageModal from "../components/ImageModal";
 
 function Home() {
-	const { userData, isAuthenticated, setHomeTime } = useContext(AuthContext);
+	const { userData, isAuthenticated } = useContext(AuthContext);
 	const { changed, change } = useContext(ChangeContext);
 	const [userDates, setUserDates] = useState([]);
 	const [ideas, setIdeas] = useState({});
@@ -18,14 +20,24 @@ function Home() {
 	const [showConfirm, setShowConfirm] = useState(false);
 	const [action, setAction] = useState(() => {});
 	const [message, setMessage] = useState([]);
+	const [showImageModal, setShowImageModal] = useState(false);
+	const [selectedImageUrl, setSelectedImageUrl] = useState("");
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		if (userData._id) {
+		if (!isAuthenticated) {
+			const token = localStorage.getItem("token");
+			if (!token) {
+				navigate("/login");
+			}
+		}
+	}, [isAuthenticated, navigate]);
+
+	useEffect(() => {
+		if (isAuthenticated) {
 			getDates(userData._id)
 				.then((res) => {
 					if (res.data.length > 0) {
-						setHomeTime(res.data);
 						setUserDates(res.data);
 
 						res.data.forEach((date) => {
@@ -44,7 +56,7 @@ function Home() {
 				})
 				.catch((err) => toast.error(err.response?.data));
 		}
-	}, [userData, changed, setHomeTime]);
+	}, [isAuthenticated, userData._id, changed]);
 
 	const formatDate = (isoString) => {
 		const date = new Date(isoString);
@@ -67,33 +79,50 @@ function Home() {
 						(dateItem) => dateItem.originalDate !== date.originalDate
 					)
 				);
-				setHomeTime(userDates);
 				change();
 			})
 			.catch((err) => toast.error(err.response?.data));
 	};
 
-	if (!isAuthenticated) {
-		navigate("/login");
-	}
+	const handleIsHome = (isHome) => {
+		updateUser(userData._id, { isHome: isHome })
+			.then((res) => change())
+			.catch((err) => toast.error(err.response?.data));
+	};
+
+	const handleImageClick = (imagePath, e) => {
+		e.stopPropagation();
+		setSelectedImageUrl(`${process.env.REACT_APP_API_URL}${imagePath}`);
+		setShowImageModal(true);
+	};
 
 	return (
 		<div
 			className="container d-flex flex-column align-items-center"
 			style={{ height: "100vh", marginTop: "10vh", gap: "5vh" }}
 		>
-			{isAuthenticated ? (
+			{isAuthenticated && userDates.length > 0 ? (
 				<>
 					<div
 						className="text-center p-3"
 						style={{
 							backgroundColor: "var(--color-surface)",
 							borderRadius: "10px",
-							color: " var(--color-primary)",
+							color: "var(--color-primary)",
 							boxShadow: "0 5px 15px rgba(0, 0, 0, 0.3)",
 						}}
 					>
-						<h3>So Glad Your Home, {userData.name?.first}</h3>
+						<h3>
+							{userData.isHome
+								? `So Glad You're Home, ${userData.name?.first}`
+								: `Welcome, ${userData.name?.first}`}
+						</h3>
+						{!userData.isHome && (
+							<p className="text-warning mt-2">
+								You are in browsing mode. Switch to "I am Home" to interact with
+								ideas.
+							</p>
+						)}
 					</div>
 					<div className="row g-3 w-100">
 						{userDates.map((date, index) => {
@@ -107,8 +136,11 @@ function Home() {
 										style={{
 											backgroundColor: "var(--color-surface)",
 											color: "var(--color-text)",
+											cursor: "pointer",
 										}}
-										onClick={() => navigate("/" + originalDate)}
+										onClick={() => {
+											navigate("/ideas/" + originalDate);
+										}}
 									>
 										<div className="card-body text-center">
 											<h5 className="card-title">{weekday}</h5>
@@ -125,7 +157,11 @@ function Home() {
 															width: "50px",
 															height: "50px",
 															objectFit: "cover",
+															cursor: "pointer",
 														}}
+														onClick={(e) =>
+															handleImageClick(idea.profileImage.path, e)
+														}
 													/>
 													<p>{idea.content}</p>
 												</div>
@@ -133,21 +169,24 @@ function Home() {
 												<p>No Ideas, Yet.</p>
 											)}
 
-											<div className="d-flex flex-row align-items-center justify-content-end">
-												<button
-													className="btn btn-danger btn-sm"
-													onClick={() => {
-														setMessage([
-															"Remove Date",
-															"Unavailable On This Day? Remove it",
-														]);
-														setAction(() => () => handleRemove(date));
-														setShowConfirm(true);
-													}}
-												>
-													<CgClose size={14} />
-												</button>
-											</div>
+											{userData.isHome && (
+												<div className="d-flex flex-row align-items-center justify-content-end">
+													<button
+														className="btn btn-danger btn-sm"
+														onClick={(e) => {
+															e.stopPropagation();
+															setMessage([
+																"Remove Date",
+																"Unavailable On This Day? Remove it",
+															]);
+															setAction(() => () => handleRemove(date));
+															setShowConfirm(true);
+														}}
+													>
+														<CgClose size={14} />
+													</button>
+												</div>
+											)}
 										</div>
 									</div>
 								</div>
@@ -162,6 +201,11 @@ function Home() {
 						title={message[0]}
 						message={message[1]}
 					/>
+					<ImageModal
+						show={showImageModal}
+						onHide={() => setShowImageModal(false)}
+						imageUrl={selectedImageUrl}
+					/>
 				</>
 			) : (
 				<>
@@ -169,7 +213,7 @@ function Home() {
 						<button
 							className="btn btn-primary btn-lg mb-3 w-75"
 							onClick={() => {
-								sessionStorage.setItem("browsing", false);
+								handleIsHome(true);
 								setShowCalender(true);
 							}}
 						>
@@ -178,7 +222,7 @@ function Home() {
 						<button
 							className="btn btn-outline-light btn-lg w-75"
 							onClick={() => {
-								sessionStorage.setItem("browsing", true);
+								handleIsHome(false);
 								setShowCalender(true);
 							}}
 						>
@@ -186,7 +230,6 @@ function Home() {
 						</button>
 					</div>
 					<CalenderModal
-						setIsHome={setHomeTime}
 						showModal={showCalender}
 						setShowModal={setShowCalender}
 					/>

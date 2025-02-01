@@ -57,8 +57,15 @@ export function registerUser(formData) {
 		});
 }
 
+export function getAllUsers() {
+	let config = {
+		method: "get",
+		maxBodyLength: Infinity,
+		url: apiURL,
+	};
+	return axios.request(config);
+}
 export function getUser(id) {
-	console.log(id);
 	let config = {
 		method: "get",
 		maxBodyLength: Infinity,

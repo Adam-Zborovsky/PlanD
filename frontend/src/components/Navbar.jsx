@@ -6,13 +6,12 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 
 const NavBar = () => {
-	const { logout, isAuthenticated } = useContext(AuthContext);
+	const { logout, isAuthenticated, userData } = useContext(AuthContext);
 	const [isOpen, setIsOpen] = useState(false);
 
 	const toggleNav = () => {
 		setIsOpen(!isOpen);
 	};
-
 	return (
 		<>
 			<div className="navbar">
@@ -26,20 +25,43 @@ const NavBar = () => {
 				</button>
 				<ul className="nav-links">
 					<li className="nav-item">
-						<Link className="nav-link" to="/">
+						<Link className="nav-link" to="/" onClick={() => toggleNav()}>
 							Home
 						</Link>
 					</li>
 					<li className="nav-item">
-						<Link className="nav-link" to="/profile">
+						<Link
+							className="nav-link"
+							to="/profile"
+							onClick={() => toggleNav()}
+						>
 							Profile
 						</Link>
 					</li>
+
 					{isAuthenticated && (
 						<li className="nav-item">
-							<button className="nav-link" onClick={logout}>
+							<button
+								className="nav-link"
+								onClick={() => {
+									toggleNav();
+									logout();
+									window.location.reload();
+								}}
+							>
 								Logout
 							</button>
+						</li>
+					)}
+					{userData.isAdmin && (
+						<li className="nav-item">
+							<Link
+								className="nav-link"
+								to="/admin"
+								onClick={() => toggleNav()}
+							>
+								Admin
+							</Link>
 						</li>
 					)}
 				</ul>

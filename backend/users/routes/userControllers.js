@@ -5,6 +5,7 @@ const {
 	loginUser,
 	updateUser,
 	deleteUser,
+	getAllUsers,
 } = require("../models/userAccessDataService");
 const auth = require("../../auth/authService");
 const { handleError } = require("../../utils/handleErrors");
@@ -63,6 +64,15 @@ router.post("/login", async (req, res) => {
 	}
 });
 
+router.get("/", async (req, res) => {
+	try {
+		let users = await getAllUsers();
+		res.status(200).send(users);
+	} catch (error) {
+		handleError(res, error.status || 400, error.message);
+	}
+});
+
 router.get("/:id", auth, async (req, res) => {
 	try {
 		const userInfo = req.user;
@@ -85,7 +95,7 @@ router.get("/:id", auth, async (req, res) => {
 	}
 });
 
-router.patch("/:id", auth, async (req, res) => {
+router.put("/:id", auth, async (req, res) => {
 	try {
 		const userInfo = req.user;
 		const { id } = req.params;

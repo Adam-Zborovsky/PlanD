@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const mongoose = require("mongoose");
 const express = require("express");
 const cors = require("cors");
@@ -8,12 +10,16 @@ const { handleError } = require("./utils/handleErrors");
 const chalk = require("chalk");
 const { loggerMiddleware } = require("./logger/loggerService");
 const path = require("path");
+
+const cleanupExpiredDates = require("./utils/cleanupExpiredDates");
+cleanupExpiredDates();
+
 const app = express();
 const PORT = process.env.PORT || 8181;
-require("dotenv").config();
 app.use(express.static("./public"));
 app.use(corsMiddleware);
 app.use(express.json());
+
 app.use(loggerMiddleware());
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));

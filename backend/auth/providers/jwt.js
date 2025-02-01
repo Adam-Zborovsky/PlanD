@@ -8,6 +8,7 @@ const generateAuthToken = (user) => {
 		_id: user._id,
 		name: user.name,
 		isAdmin: user.isAdmin,
+		isHome: user.isHome,
 	};
 	const token = jwt.sign(payload, SECRET_WORD);
 	return token;

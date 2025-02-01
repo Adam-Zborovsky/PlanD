@@ -32,17 +32,9 @@ export const AuthProvider = ({ children }) => {
 		setUserData({});
 		toast.success("Log out successfully");
 	};
-	const setHomeTime = (datesIsHome) => {
-		const token = localStorage.getItem("token");
-		if (token != null) {
-			setUserData({ ...setUserData(jwtDecode(token)), dates: { datesIsHome } });
-		}
-	};
 
 	return (
-		<AuthContext.Provider
-			value={{ isAuthenticated, userData, login, logout, setHomeTime }}
-		>
+		<AuthContext.Provider value={{ isAuthenticated, userData, login, logout }}>
 			{children}
 		</AuthContext.Provider>
 	);

@@ -15,16 +15,20 @@ const postIdea = async (ownerId, date, content) => {
 
 const getIdeas = async (ideas) => {
 	try {
-		ideas.forEach(async (idea) => {
-			const user = await User.findById(idea.ownerId);
-			if (user.image) {
-				idea = {
-					...idea,
-					profileImage: user.image,
-				};
-			}
-		});
-		return ideas;
+		const updatedIdeas = await Promise.all(
+			ideas.map(async (idea) => {
+				const user = await User.findById(idea.ownerId);
+
+				if (user.image) {
+					return {
+						...idea._doc,
+						profileImage: user.image,
+					};
+				}
+				return idea;
+			})
+		);
+		return updatedIdeas;
 	} catch (error) {
 		return createError("Mongoose", error);
 	}
@@ -86,7 +90,7 @@ const deleteIdea = async (id) => {
 	try {
 		const idea = await Idea.findByIdAndDelete(id);
 
-		if (!idea) throw { status: 404, message: "User not found" };
+		if (!idea) throw { status: 404, message: "Idea not found" };
 
 		return idea;
 	} catch (error) {

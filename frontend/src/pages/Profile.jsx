@@ -87,7 +87,6 @@ function Profile() {
 	const handleDelete = async () => {
 		try {
 			await deleteUser(userData._id);
-			toast.success("User Deleted Successfully");
 			logout();
 			navigate("/");
 		} catch (err) {
@@ -247,9 +246,9 @@ function Profile() {
 									type="submit"
 									className="btn btn-primary"
 									style={{
-										width: "30px",
+										width: "90px",
 										height: "40px",
-										fontSize: "12px",
+										fontSize: "14px",
 									}}
 									disabled={!(formik.dirty && formik.isValid)}
 								>
@@ -261,7 +260,7 @@ function Profile() {
 									type="button"
 									className="btn btn-secondary"
 									style={{
-										width: "30px",
+										width: "85px",
 										height: "40px",
 										fontSize: "12px",
 									}}
@@ -275,9 +274,9 @@ function Profile() {
 									type="button"
 									className="btn btn-danger"
 									style={{
-										width: "30px",
+										width: "90px",
 										height: "40px",
-										fontSize: "12px",
+										fontSize: "14px",
 									}}
 									onClick={() => setShowConfirm(true)}
 								>
@@ -293,9 +292,9 @@ function Profile() {
 							<button
 								className="btn btn-info "
 								style={{
-									width: "30px",
+									width: "90px",
 									height: "40px",
-									fontSize: "12px",
+									fontSize: "14px",
 								}}
 								onClick={() => setIsEditing(true)}
 							>
@@ -306,14 +305,14 @@ function Profile() {
 							<button
 								className="btn btn-warning "
 								style={{
-									width: "30px",
+									width: "90px",
 									height: "40px",
 									fontSize: "12px",
 								}}
 								onClick={handleLogout}
 							>
 								<FaSignOutAlt className="me-2" />
-								Log Out
+								Logout
 							</button>
 						</div>
 					)}

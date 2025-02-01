@@ -7,7 +7,7 @@ import { AuthContext } from "../context/AuthContext";
 import { addDate } from "../Services/dateService";
 import { toast } from "react-toastify";
 
-function CalenderModal({ setIsHome, showModal, setShowModal }) {
+function CalenderModal({ showModal, setShowModal }) {
 	const [selectedDates, setSelectedDates] = useState([]);
 	const { userData } = useContext(AuthContext);
 
@@ -23,7 +23,12 @@ function CalenderModal({ setIsHome, showModal, setShowModal }) {
 	};
 
 	const formatDate = (date) => {
-		const options = { weekday: "long", day: "numeric", month: "short", year: "numeric" };
+		const options = {
+			weekday: "long",
+			day: "numeric",
+			month: "short",
+			year: "numeric",
+		};
 		return date.toLocaleDateString("en-GB", options);
 	};
 
@@ -37,7 +42,6 @@ function CalenderModal({ setIsHome, showModal, setShowModal }) {
 		}
 	};
 
-
 	const handleClose = () => {
 		setShowModal(false);
 	};
@@ -49,8 +53,7 @@ function CalenderModal({ setIsHome, showModal, setShowModal }) {
 				.catch((err) => toast.error(err.response?.data));
 		});
 		setShowModal(false);
-		setIsHome(true);
-		window.location.reload()
+		window.location.reload();
 	};
 	const highlightWeekends = ({ date }) => {
 		const day = date.getDay();
@@ -69,13 +72,18 @@ function CalenderModal({ setIsHome, showModal, setShowModal }) {
 			<Modal.Header closeButton>
 				<Modal.Title>Select Your Home Dates</Modal.Title>
 			</Modal.Header>
-			<Modal.Body >
-				<Calendar onChange={handleDateChange} selectRange locale="en-US"
-					tileClassName={highlightWeekends} navigationLabel={({ date, label }) => {
+			<Modal.Body>
+				<Calendar
+					onChange={handleDateChange}
+					selectRange
+					locale="en-US"
+					tileClassName={highlightWeekends}
+					navigationLabel={({ date, label }) => {
 						return date.toLocaleDateString("en-US", { month: "short" });
-					}} />
+					}}
+				/>
 			</Modal.Body>
-			<Modal.Footer >
+			<Modal.Footer>
 				<button className="btn btn-secondary" onClick={handleClose}>
 					Close
 				</button>

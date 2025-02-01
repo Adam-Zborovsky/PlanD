@@ -20,16 +20,21 @@ const registerUser = async (newUser) => {
 	}
 };
 
+const getAllUsers = async () => {
+	try {
+		let users = await User.find().select("-password");
+		return users;
+	} catch (error) {
+		return createError("Mongoose", error);
+	}
+};
+
 const getUser = async (UserId) => {
 	try {
-		let user = await User.findById(UserId);
-		user = {
-			_id: user._id,
-			name: user.name,
-			email: user.email,
-			Image: user.image,
-			dates: user.dates,
-		};
+		let user = await User.findById(UserId).select("-password");
+		if (!user) {
+			throw { status: 404, message: "User not found" };
+		}
 		return user;
 	} catch (error) {
 		return createError("Mongoose", error);
@@ -85,4 +90,11 @@ const deleteUser = async (id) => {
 	}
 };
 
-module.exports = { registerUser, getUser, loginUser, updateUser, deleteUser };
+module.exports = {
+	registerUser,
+	getAllUsers,
+	getUser,
+	loginUser,
+	updateUser,
+	deleteUser,
+};

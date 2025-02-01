@@ -29,12 +29,21 @@ router.post("/:ownerId", auth, async (req, res) => {
 	}
 });
 
+router.get("/", async (req, res) => {
+	try {
+		const ideas = await Idea.find({});
+		res.status(200).send(ideas);
+	} catch (error) {
+		handleError(res, 500, error.message);
+	}
+});
+
 router.get("/:date", async (req, res) => {
 	try {
 		const { date } = req.params;
 
 		const ideas = await Idea.find({ date: date });
-		if (ideas.length === 0) return res.status(404).send("No ideas found, Yet!");
+		if (ideas.length === 0) return res.status(204).send("No ideas found, Yet!");
 
 		let ideasWithProfile = await getIdeas(ideas);
 		console.log(ideasWithProfile);

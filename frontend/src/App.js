@@ -10,6 +10,8 @@ import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import Profile from "./pages/Profile.jsx";
 import ViewDate from "./pages/ViewDate.jsx";
+import NotFound from "./pages/NotFound.jsx";
+import Admin from "./pages/Admin.jsx";
 
 function App() {
 	return (
@@ -35,10 +37,10 @@ function App() {
 						<Route path="/login" element={<Login />} />
 						<Route path="/register" element={<Register />} />
 						<Route path="/profile" element={<Profile />} />
-						<Route path="/:date" element={<ViewDate />} />
-						<Route path="*" />
+						<Route path="/ideas/:date" element={<ViewDate />} />
+						<Route path="/admin" element={<Admin />} />
+						<Route path="*" element={<NotFound />} />
 					</Routes>
-					{/* <Footer /> */}
 				</Router>
 			</ChangeProvider>
 		</AuthProvider>

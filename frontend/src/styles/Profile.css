@@ -64,8 +64,3 @@
 .profile-view-actions {
 	margin-top: 2rem;
 }
-
-.profile-edit-actions button,
-.profile-view-actions button {
-	min-width: 100px;
-}

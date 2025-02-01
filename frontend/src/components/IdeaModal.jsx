@@ -11,12 +11,12 @@ function IdeaModal({ showModal, setShowModal, initialIdea }) {
 	const { change } = useContext(ChangeContext);
 	const [ideaContent, setIdeaContent] = useState(initialIdea.content);
 	const { date } = useParams();
-	const [isEditing, setIsEditing] = useState(ideaContent === "" ? false : true);
+	const [isEditing, setIsEditing] = useState(!!initialIdea.content);
 
 	useEffect(() => {
 		setIdeaContent(initialIdea?.content || "");
-		setIsEditing(ideaContent === "" ? false : true);
-	}, [initialIdea, ideaContent]);
+		setIsEditing(!!initialIdea?.content);
+	}, [initialIdea]);
 
 	const handleClose = () => setShowModal(false);
 

@@ -9,6 +9,7 @@ import IdeaModal from "../components/IdeaModal";
 import { AuthContext } from "../context/AuthContext";
 import { ChangeContext } from "../context/ChangeContext";
 import ConfirmModal from "../components/ConfirmModal";
+import ImageModal from "../components/ImageModal";
 
 function ViewDate() {
 	const { changed, change } = useContext(ChangeContext);
@@ -19,14 +20,16 @@ function ViewDate() {
 	const [showConfirm, setShowConfirm] = useState(false);
 	const [action, setAction] = useState(() => {});
 	const [message, setMessage] = useState([]);
+	const [showImageModal, setShowImageModal] = useState(false);
+	const [selectedImageUrl, setSelectedImageUrl] = useState("");
 	const { date } = useParams();
 
 	useEffect(() => {
 		getIdeas(date)
 			.then((res) => {
-				setIdeas(res.data);
+				if (res.status !== 204) setIdeas(res.data);
 			})
-			.catch((err) => toast.error(err.response.data));
+			.catch((err) => console.log(err.response.data));
 	}, [date, changed]);
 
 	const formatDate = (isoString) => {
@@ -46,7 +49,6 @@ function ViewDate() {
 	const handleVote = (ideaId) => {
 		voteForIdea(ideaId)
 			.then((res) => {
-				console.log(res.data);
 				change();
 			})
 			.catch((err) => toast.error(err.response.data));
@@ -55,10 +57,14 @@ function ViewDate() {
 	const handleDelete = (ideaId) => {
 		deleteIdea(ideaId)
 			.then((res) => {
-				console.log(res.data);
 				change();
 			})
 			.catch((err) => toast.error(err.response.data));
+	};
+
+	const handleImageClick = (imagePath) => {
+		setSelectedImageUrl(`${process.env.REACT_APP_API_URL}${imagePath}`);
+		setShowImageModal(true);
 	};
 
 	return (
@@ -79,6 +85,12 @@ function ViewDate() {
 					<h3>
 						{formattedDate.weekday} {formattedDate.dayMonth}
 					</h3>
+					{!userData.isHome && (
+						<p className="text-warning mt-2">
+							You are in browsing mode. Switch to "I am Home" to add or edit
+							ideas.
+						</p>
+					)}
 				</div>
 
 				<div className="w-100">
@@ -86,7 +98,7 @@ function ViewDate() {
 						{ideas.map((idea, index) => (
 							<div
 								key={index}
-								className="card  d-flex flex-column align-items-center p-3"
+								className="card d-flex flex-column align-items-center p-3"
 								style={{
 									backgroundColor: "var(--color-surface)",
 									color: "var(--color-text)",
@@ -95,28 +107,46 @@ function ViewDate() {
 									maxWidth: "75vw",
 								}}
 							>
-								<h5 className="card-title">{idea.content}</h5>
-								<p className="card-text mb-4">{idea.image}</p>
+								<div className="d-flex align-items-center gap-3 mb-3">
+									<div className="d-flex align-items-center gap-1">
+										<img
+											src={`${process.env.REACT_APP_API_URL}${idea.profileImage.path}`}
+											alt={idea.profileImage.alt}
+											className="rounded-circle"
+											style={{
+												width: "40px",
+												height: "40px",
+												objectFit: "cover",
+												cursor: "pointer",
+											}}
+											onClick={() => handleImageClick(idea.profileImage.path)}
+										/>
+										<h5 className="card-title">:</h5>
+									</div>
+									<h5 className="card-title">{idea.content}</h5>
+								</div>
 								<div className="d-flex gap-5">
-									<button
-										className="btn btn-outline-primary"
-										style={{
-											borderRadius: "10px",
-											width: "50px",
-											height: "45px",
-										}}
-										onClick={() => handleVote(idea._id)}
-									>
-										{idea.votes.includes(userData._id) ? (
-											<AiFillLike
-												size={20}
-												style={{ transform: "rotate(180deg)" }}
-											/>
-										) : (
-											<AiFillLike size={20} />
-										)}
-									</button>
-									{userData._id === idea.ownerId && (
+									{userData.isHome && (
+										<button
+											className="btn btn-outline-primary"
+											style={{
+												borderRadius: "10px",
+												width: "50px",
+												height: "45px",
+											}}
+											onClick={() => handleVote(idea._id)}
+										>
+											{idea.votes.includes(userData._id) ? (
+												<AiFillLike
+													size={20}
+													style={{ transform: "rotate(180deg)" }}
+												/>
+											) : (
+												<AiFillLike size={20} />
+											)}
+										</button>
+									)}
+									{userData.isHome && userData._id === idea.ownerId && (
 										<>
 											<button
 												className="btn btn-outline-primary"
@@ -157,18 +187,20 @@ function ViewDate() {
 						))}
 					</div>
 				</div>
-				<div>
-					<button
-						className="btn btn-outline-primary"
-						style={{ borderRadius: "10px" }}
-						onClick={() => {
-							setInitialIdea({ content: "" });
-							setShowIdeaModal(true);
-						}}
-					>
-						<TiPlus size={25} />
-					</button>
-				</div>
+				{userData.isHome && (
+					<div>
+						<button
+							className="btn btn-outline-primary"
+							style={{ borderRadius: "10px" }}
+							onClick={() => {
+								setInitialIdea({ content: "" });
+								setShowIdeaModal(true);
+							}}
+						>
+							<TiPlus size={25} />
+						</button>
+					</div>
+				)}
 			</div>
 			<IdeaModal
 				showModal={showIdeaModal}
@@ -181,6 +213,11 @@ function ViewDate() {
 				action={action}
 				title={message[0]}
 				message={message[1]}
+			/>
+			<ImageModal
+				show={showImageModal}
+				onHide={() => setShowImageModal(false)}
+				imageUrl={selectedImageUrl}
 			/>
 		</>
 	);

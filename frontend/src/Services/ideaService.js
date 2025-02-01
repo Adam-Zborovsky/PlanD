@@ -27,6 +27,14 @@ export function getIdeas(date) {
 	};
 	return axios.request(config);
 }
+export function getAllIdeas() {
+	let config = {
+		method: "get",
+		maxBodyLength: Infinity,
+		url: apiURL,
+	};
+	return axios.request(config);
+}
 
 export function getMostVotedIdea(date) {
 	let config = {
