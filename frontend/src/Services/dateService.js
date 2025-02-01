@@ -27,9 +27,9 @@ export function getDates(id) {
 	return axios.request(config);
 }
 
-export function DeleteDate(id, date) {
+export function deleteDate(id, date) {
 	let config = {
-		method: "patch",
+		method: "delete",
 		maxBodyLength: Infinity,
 		url: apiURL + id,
 		headers: {

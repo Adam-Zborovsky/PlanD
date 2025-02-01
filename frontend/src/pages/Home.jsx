@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 import CalenderModal from "../components/CalenderModal";
-import { getDates, DeleteDate } from "../Services/dateService";
+import { getDates, deleteDate } from "../Services/dateService";
 import { getMostVotedIdea } from "../Services/ideaService";
 import { CgClose } from "react-icons/cg";
 import ConfirmModal from "../components/ConfirmModal";
@@ -71,13 +71,11 @@ function Home() {
 	};
 
 	const handleRemove = async (date) => {
-		DeleteDate(userData._id, date.originalDate)
+		deleteDate(userData._id, date)
 			.then((res) => {
 				toast.success("Date Removed");
 				setUserDates(
-					userDates.filter(
-						(dateItem) => dateItem.originalDate !== date.originalDate
-					)
+					userDates.filter((dateItem) => dateItem.originalDate !== date)
 				);
 				change();
 			})
@@ -179,7 +177,7 @@ function Home() {
 																"Remove Date",
 																"Unavailable On This Day? Remove it",
 															]);
-															setAction(() => () => handleRemove(date));
+															setAction(() => () => handleRemove(originalDate));
 															setShowConfirm(true);
 														}}
 													>

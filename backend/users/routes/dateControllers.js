@@ -12,7 +12,6 @@ router.post("/:userId", async (req, res) => {
 		const { date } = req.body;
 		console.log(date);
 
-
 		const user = await User.findById(userId);
 		if (!user) return res.status(404).send("User not found");
 
@@ -49,6 +48,23 @@ router.patch("/:userId", auth, async (req, res) => {
 		const { userId } = req.params;
 		const dateToDel = req.body.date;
 
+		const user = await getUser(userId);
+		if (!user) return res.status(404).send("User not found");
+
+		user.dates = user.dates.filter((date) => date !== dateToDel);
+		await user.save();
+
+		res.status(200).send(user.dates);
+	} catch (error) {
+		handleError(res, 500, error.message);
+	}
+});
+// Delete dates of a user
+router.delete("/:userId", auth, async (req, res) => {
+	try {
+		const { userId } = req.params;
+
+		const dateToDel = req.body.date;
 
 		const user = await getUser(userId);
 		if (!user) return res.status(404).send("User not found");
