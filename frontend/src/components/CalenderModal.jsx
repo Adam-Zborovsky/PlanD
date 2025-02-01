@@ -3,6 +3,7 @@ import Modal from "react-bootstrap/Modal";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "../styles/CalenderModal.css";
+import { ChangeContext } from "../context/ChangeContext";
 import { AuthContext } from "../context/AuthContext";
 import { addDate } from "../Services/dateService";
 import { toast } from "react-toastify";
@@ -10,6 +11,7 @@ import { toast } from "react-toastify";
 function CalenderModal({ showModal, setShowModal }) {
 	const [selectedDates, setSelectedDates] = useState([]);
 	const { userData } = useContext(AuthContext);
+	const { change } = useContext(ChangeContext);
 
 	const getDatesInRange = (startDate, endDate) => {
 		const date = new Date(startDate.getTime());
@@ -50,12 +52,10 @@ function CalenderModal({ showModal, setShowModal }) {
 		selectedDates.forEach((date) => {
 			addDate(userData._id, date)
 				.then((res) => {
-					updateUser(userData._id, { isHome: isHome })
-						.then((updateRes) => change())
-						.catch((updateErr) => toast.error(updateErr.response?.data));
 					setTimeout(() => {
 						window.location.reload();
 					}, 1000);
+					change();
 				})
 
 				.catch((err) => toast.error(err.response?.data));
