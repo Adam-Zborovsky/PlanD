@@ -15,8 +15,8 @@ import Admin from "./pages/Admin.jsx";
 
 function App() {
 	return (
-		<AuthProvider>
-			<ChangeProvider>
+		<ChangeProvider>
+			<AuthProvider>
 				<ToastContainer
 					position="top-right"
 					autoClose={5000}
@@ -42,8 +42,8 @@ function App() {
 						<Route path="*" element={<NotFound />} />
 					</Routes>
 				</Router>
-			</ChangeProvider>
-		</AuthProvider>
+			</AuthProvider>
+		</ChangeProvider>
 	);
 }
 

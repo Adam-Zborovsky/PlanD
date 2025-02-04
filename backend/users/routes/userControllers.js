@@ -6,6 +6,7 @@ const {
 	updateUser,
 	deleteUser,
 	getAllUsers,
+	getToken,
 } = require("../models/userAccessDataService");
 const auth = require("../../auth/authService");
 const { handleError } = require("../../utils/handleErrors");
@@ -73,13 +74,26 @@ router.get("/", async (req, res) => {
 	}
 });
 
+router.get("/token/:id", auth, async (req, res) => {
+	try {
+		const userInfo = req.user;
+		const { id } = req.params;
+		if (userInfo._id !== id && !userInfo.isAdmin) {
+			return res
+				.status(403)
+				.send("Authorization Error: Only the same user or admin can get token");
+		}
+		const token = await getToken(userInfo._id);
+		res.status(200).send(token);
+	} catch (error) {
+		handleError(res, error.status || 400, error.message);
+	}
+});
+
 router.get("/:id", auth, async (req, res) => {
 	try {
 		const userInfo = req.user;
 		const { id } = req.params;
-		console.log(userInfo);
-		console.log(id);
-
 		if (userInfo._id !== id && !userInfo.isAdmin) {
 			return res
 				.status(403)

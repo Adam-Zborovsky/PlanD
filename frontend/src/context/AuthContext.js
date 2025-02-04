@@ -1,11 +1,14 @@
 import { jwtDecode } from "jwt-decode";
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
 import { toast } from "react-toastify";
+import { ChangeContext } from "./ChangeContext";
+import { getToken } from "../Services/userService";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
+	const { changed } = useContext(ChangeContext);
 	const [userData, setUserData] = useState({});
 
 	useEffect(() => {
@@ -18,10 +21,21 @@ export const AuthProvider = ({ children }) => {
 			setUserData({});
 		}
 	}, []);
+	useEffect(() => {
+		if (userData._id) {
+			getToken(userData._id)
+				.then((res) => {
+					localStorage.setItem("token", res.data);
+					setUserData(jwtDecode(res.data));
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		}
+	}, [changed, userData._id]);
 
 	const login = (token) => {
 		localStorage.setItem("token", token);
-		setIsAuthenticated(true);
 		setUserData(jwtDecode(token));
 		toast.success("Log in successfully");
 	};

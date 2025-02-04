@@ -29,6 +29,21 @@ const getAllUsers = async () => {
 	}
 };
 
+const getToken = async (id) => {
+	try {
+		const user = await User.findById(id);
+		if (!user) {
+			const error = new Error("User doesn't exist");
+			error.status = 401;
+			createError("Authentication", error);
+		}
+		const token = generateAuthToken(user);
+		return token;
+	} catch (error) {
+		createError("Mongoose", error);
+	}
+};
+
 const getUser = async (UserId) => {
 	try {
 		let user = await User.findById(UserId).select("-password");
@@ -60,6 +75,7 @@ const loginUser = async (email, password) => {
 		createError("Mongoose", error);
 	}
 };
+
 const updateUser = async (id, updateData) => {
 	try {
 		const user = await User.findByIdAndUpdate(
@@ -93,6 +109,7 @@ const deleteUser = async (id) => {
 module.exports = {
 	registerUser,
 	getAllUsers,
+	getToken,
 	getUser,
 	loginUser,
 	updateUser,

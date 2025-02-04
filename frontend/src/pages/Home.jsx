@@ -71,20 +71,29 @@ function Home() {
 	};
 
 	const handleRemove = async (date) => {
-		deleteDate(userData._id, date)
-			.then((res) => {
-				toast.success("Date Removed");
-				setUserDates(
-					userDates.filter((dateItem) => dateItem.originalDate !== date)
-				);
-				change();
-			})
-			.catch((err) => toast.error(err.response?.data));
+		try {
+			await deleteDate(userData._id, date);
+			toast.success("Date Removed");
+			setUserDates(
+				userDates.filter((dateItem) => dateItem.originalDate !== date)
+			);
+			change();
+			console.log(userDates.length);
+			if (userDates.length === 1) {
+				setUserDates([]);
+				handleIsHome(false);
+			}
+		} catch (err) {
+			toast.error(err.response?.data);
+		}
 	};
 
 	const handleIsHome = (isHome) => {
 		updateUser(userData._id, { isHome: isHome })
-			.then((res) => change())
+			.then((res) => {
+				console.log("res", res.data);
+				change();
+			})
 			.catch((err) => toast.error(err.response?.data));
 	};
 
@@ -93,7 +102,6 @@ function Home() {
 		setSelectedImageUrl(`${process.env.REACT_APP_API_URL}${imagePath}`);
 		setShowImageModal(true);
 	};
-	console.log(userData?.isHome);
 	return (
 		<div
 			className="container d-flex flex-column align-items-center"
@@ -130,7 +138,7 @@ function Home() {
 							return (
 								<div className="col-6" key={index}>
 									<div
-										className="card date-card border-0 shadow-sm"
+										className="card date-card"
 										style={{
 											backgroundColor: "var(--color-surface)",
 											color: "var(--color-text)",
@@ -147,21 +155,23 @@ function Home() {
 											{idea ? (
 												<div className="mb-3">
 													<h6 className="text-primary">Most Voted Idea</h6>
-													<img
-														src={`${process.env.REACT_APP_API_URL}${idea.profileImage.path}`}
-														alt={idea.profileImage.alt}
-														className="rounded-circle mb-3"
-														style={{
-															width: "50px",
-															height: "50px",
-															objectFit: "cover",
-															cursor: "pointer",
-														}}
-														onClick={(e) =>
-															handleImageClick(idea.profileImage.path, e)
-														}
-													/>
-													<p>{idea.content}</p>
+													<div className="d-flex flex-row align-items-center justify-content-center">
+														<img
+															src={`${process.env.REACT_APP_API_URL}${idea.profileImage.path}`}
+															alt={idea.profileImage.alt}
+															className="rounded-circle "
+															style={{
+																width: "30px",
+																height: "30px",
+																objectFit: "cover",
+																cursor: "pointer",
+															}}
+															onClick={(e) =>
+																handleImageClick(idea.profileImage.path, e)
+															}
+														/>
+														<p className="m-2">: {idea.content}</p>
+													</div>
 												</div>
 											) : (
 												<p>No Ideas, Yet.</p>

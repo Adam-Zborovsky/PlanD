@@ -51,13 +51,7 @@ function CalenderModal({ showModal, setShowModal }) {
 	const saveDates = () => {
 		selectedDates.forEach((date) => {
 			addDate(userData._id, date)
-				.then((res) => {
-					setTimeout(() => {
-						window.location.reload();
-					}, 1000);
-					change();
-				})
-
+				.then((res) => change())
 				.catch((err) => toast.error(err.response?.data));
 		});
 		setShowModal(false);

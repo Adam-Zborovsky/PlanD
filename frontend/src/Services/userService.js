@@ -65,6 +65,19 @@ export function getAllUsers() {
 	};
 	return axios.request(config);
 }
+
+export function getToken(id) {
+	let config = {
+		method: "get",
+		maxBodyLength: Infinity,
+		url: apiURL + "token/" + id,
+		headers: {
+			"x-auth-token": localStorage.getItem("token"),
+		},
+	};
+	return axios.request(config);
+}
+
 export function getUser(id) {
 	let config = {
 		method: "get",

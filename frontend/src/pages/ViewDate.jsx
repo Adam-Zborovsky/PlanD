@@ -4,7 +4,7 @@ import { deleteIdea, getIdeas, voteForIdea } from "../Services/ideaService";
 import { useParams } from "react-router-dom";
 import { TiPlus } from "react-icons/ti";
 import { AiFillLike, AiFillEdit } from "react-icons/ai";
-import { FaTrash } from "react-icons/fa";
+import { FaTrash, FaHeart } from "react-icons/fa";
 import IdeaModal from "../components/IdeaModal";
 import { AuthContext } from "../context/AuthContext";
 import { ChangeContext } from "../context/ChangeContext";
@@ -124,6 +124,11 @@ function ViewDate() {
 										<h5 className="card-title">:</h5>
 									</div>
 									<h5 className="card-title">{idea.content}</h5>
+								</div>
+								<div className="d-flex flex-row align-items-center justify-content-center">
+									<FaHeart className="m-2" color="red" />
+									<p className="m-2">:</p>
+									<p className="m-2">{idea.votes.length}</p>
 								</div>
 								<div className="d-flex gap-5">
 									{userData.isHome && (
