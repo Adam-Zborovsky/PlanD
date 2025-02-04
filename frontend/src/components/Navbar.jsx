@@ -39,6 +39,27 @@ const NavBar = () => {
 						</Link>
 					</li>
 
+					<li className="nav-item">
+						<Link
+							className="nav-link"
+							to="/all-friends"
+							onClick={() => toggleNav()}
+						>
+							All Friends
+						</Link>
+					</li>
+
+					{userData.isAdmin && (
+						<li className="nav-item">
+							<Link
+								className="nav-link"
+								to="/admin"
+								onClick={() => toggleNav()}
+							>
+								Admin
+							</Link>
+						</li>
+					)}
 					{isAuthenticated && (
 						<li className="nav-item">
 							<button
@@ -51,17 +72,6 @@ const NavBar = () => {
 							>
 								Logout
 							</button>
-						</li>
-					)}
-					{userData.isAdmin && (
-						<li className="nav-item">
-							<Link
-								className="nav-link"
-								to="/admin"
-								onClick={() => toggleNav()}
-							>
-								Admin
-							</Link>
 						</li>
 					)}
 				</ul>

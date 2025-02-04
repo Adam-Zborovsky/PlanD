@@ -11,6 +11,7 @@ import Register from "./pages/Register.jsx";
 import Profile from "./pages/Profile.jsx";
 import ViewDate from "./pages/ViewDate.jsx";
 import NotFound from "./pages/NotFound.jsx";
+import AllFriends from "./pages/AllFriends.jsx";
 import Admin from "./pages/Admin.jsx";
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
 						<Route path="/register" element={<Register />} />
 						<Route path="/profile" element={<Profile />} />
 						<Route path="/ideas/:date" element={<ViewDate />} />
+						<Route path="/all-friends" element={<AllFriends />} />
 						<Route path="/admin" element={<Admin />} />
 						<Route path="*" element={<NotFound />} />
 					</Routes>

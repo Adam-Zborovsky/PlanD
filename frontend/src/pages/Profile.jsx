@@ -20,19 +20,21 @@ function Profile() {
 	const [showConfirm, setShowConfirm] = useState(false);
 
 	useEffect(() => {
-		if (userData._id) {
-			getUser(userData._id)
-				.then((res) => setUser(res.data))
-				.catch((err) => console.log(err?.response?.data || err.message));
+		if (!isAuthenticated) {
+			const token = localStorage.getItem("token");
+			if (!token) {
+				navigate("/login");
+			}
 		}
-	}, [userData]);
+	}, [isAuthenticated, navigate]);
 
 	const formik = useFormik({
 		initialValues: {
-			firstName: "",
-			middleName: "",
-			lastName: "",
-			email: "",
+			firstName: user?.name?.first || "",
+			middleName: user?.name?.middle || "",
+			lastName: user?.name?.last || "",
+			email: user?.email || "",
+			dates: user?.dates?.join(", ") || "",
 		},
 		validationSchema: yup.object({
 			firstName: yup
@@ -54,6 +56,7 @@ function Profile() {
 				.string()
 				.email("Invalid email format")
 				.required("Email is required"),
+			dates: yup.string(),
 		}),
 		onSubmit: async (values) => {
 			const formData = new FormData();
@@ -67,6 +70,7 @@ function Profile() {
 				})
 			);
 			formData.append("email", values.email);
+			formData.append("dates", values.dates);
 
 			const file = fileInputRef.current?.files?.[0];
 			if (file) {
@@ -83,6 +87,23 @@ function Profile() {
 			setIsEditing(false);
 		},
 	});
+
+	useEffect(() => {
+		if (userData._id) {
+			getUser(userData._id)
+				.then((res) => {
+					setUser(res.data);
+					formik.setValues({
+						firstName: res.data.name.first || "",
+						middleName: res.data.name.middle || "",
+						lastName: res.data.name.last || "",
+						email: res.data.email || "",
+						dates: res.data.dates.join(", ") || "",
+					});
+				})
+				.catch((err) => console.log(err?.response?.data || err.message));
+		}
+	}, [userData, formik]);
 
 	const handleDelete = async () => {
 		try {
@@ -101,6 +122,7 @@ function Profile() {
 				middleName: user?.name?.middle || "",
 				lastName: user?.name?.last || "",
 				email: user?.email || "",
+				dates: user?.dates?.join(", ") || "",
 			},
 		});
 		setIsEditing(false);
@@ -111,18 +133,15 @@ function Profile() {
 		navigate("/");
 	};
 
-	if (!isAuthenticated) {
-		navigate("/login");
-	}
 	return (
 		<>
-			<div className="profile-container d-flex justify-content-center align-items-center">
+			<div className="profile-container d-flex justify-content-center align-items-start">
 				<div className="card profile-card p-4">
 					<div className="profile-header text-center">
-						{user?.Image?.path ? (
+						{user.image?.path ? (
 							<img
-								src={`${process.env.REACT_APP_API_URL}${user.Image.path}`}
-								alt={user.Image.alt}
+								src={`${process.env.REACT_APP_API_URL}${user.image.path}`}
+								alt={user.image.alt}
 								className="profile-picture mb-3"
 							/>
 						) : (
@@ -155,7 +174,6 @@ function Profile() {
 					{isEditing && (
 						<form onSubmit={formik.handleSubmit} className="profile-form">
 							<h4>Edit Profile</h4>
-
 							<div className="form-section">
 								<div className="row">
 									<div className="form-group col-12 col-md-4">
@@ -210,7 +228,6 @@ function Profile() {
 									</div>
 								</div>
 							</div>
-
 							<div className="form-section">
 								<div className="mb-3">
 									<label>Email:</label>
@@ -229,6 +246,24 @@ function Profile() {
 							</div>
 
 							<div className="form-section">
+								<div className="mb-3">
+									<label>Dates at Home</label>
+									<textarea
+										className="form-control w-100 text-center"
+										name="dates"
+										value={formik.values.dates}
+										onChange={formik.handleChange}
+										onBlur={formik.handleBlur}
+										placeholder="Enter dates separated by commas"
+										style={{ resize: "none" }}
+									/>
+									{formik.touched.dates && formik.errors.dates && (
+										<div className="error-message">{formik.errors.dates}</div>
+									)}
+								</div>
+							</div>
+
+							<div className="form-section">
 								<h5>Change Profile Picture (Optional)</h5>
 								<div className="form-group">
 									<input
@@ -240,7 +275,6 @@ function Profile() {
 									/>
 								</div>
 							</div>
-
 							<div className="profile-edit-actions d-flex justify-content-between gap-3 mt-4">
 								<button
 									type="submit"
