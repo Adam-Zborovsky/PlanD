@@ -3,6 +3,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import { ChangeContext } from "../context/ChangeContext";
 import { updateUser, deleteUser, getUser } from "../Services/userService";
 import { FaEdit, FaSignOutAlt, FaSave, FaTimes, FaTrash } from "react-icons/fa";
 import { toast } from "react-toastify";
@@ -10,14 +11,20 @@ import ConfirmModal from "../components/ConfirmModal";
 import "../styles/Profile.css";
 
 function Profile() {
-	const { userData, logout, isAuthenticated, change } = useContext(AuthContext);
-	const navigate = useNavigate();
-	const fileInputRef = useRef(null);
-
+	const { userData, logout, isAuthenticated } = useContext(AuthContext);
+	const { change, changed } = useContext(ChangeContext);
 	const [isEditing, setIsEditing] = useState(false);
-
 	const [user, setUser] = useState({});
+	const [initialValues, setInitialValues] = useState({
+		firstName: "",
+		middleName: "",
+		lastName: "",
+		email: "",
+		dates: "",
+	});
 	const [showConfirm, setShowConfirm] = useState(false);
+	const fileInputRef = useRef(null);
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (!isAuthenticated) {
@@ -29,13 +36,8 @@ function Profile() {
 	}, [isAuthenticated, navigate]);
 
 	const formik = useFormik({
-		initialValues: {
-			firstName: user?.name?.first || "",
-			middleName: user?.name?.middle || "",
-			lastName: user?.name?.last || "",
-			email: user?.email || "",
-			dates: user?.dates?.join(", ") || "",
-		},
+		initialValues,
+		enableReinitialize: true,
 		validationSchema: yup.object({
 			firstName: yup
 				.string()
@@ -77,12 +79,29 @@ function Profile() {
 				formData.append("profilePicture", file);
 			}
 
-			updateUser(user._id, formData)
-				.then((res) => {
-					toast.success("User Updated Successfully");
-					change();
-				})
-				.catch((err) => toast.error(err?.response?.data || err.message));
+			try {
+				await updateUser(user._id, formData);
+				setUser((prevUser) => ({
+					...prevUser,
+					name: {
+						first: values.firstName,
+						middle: values.middleName,
+						last: values.lastName,
+					},
+					email: values.email,
+					dates: values.dates.split(", "),
+					image: {
+						...prevUser.image,
+						path: formData.get("profilePicture")
+							? URL.createObjectURL(formData.get("profilePicture"))
+							: prevUser.image.path,
+					},
+				}));
+				toast.success("User Updated Successfully");
+				change();
+			} catch (err) {
+				toast.error(err?.response?.data || err.message);
+			}
 
 			setIsEditing(false);
 		},
@@ -93,7 +112,7 @@ function Profile() {
 			getUser(userData._id)
 				.then((res) => {
 					setUser(res.data);
-					formik.setValues({
+					setInitialValues({
 						firstName: res.data.name.first || "",
 						middleName: res.data.name.middle || "",
 						lastName: res.data.name.last || "",
@@ -103,7 +122,7 @@ function Profile() {
 				})
 				.catch((err) => console.log(err?.response?.data || err.message));
 		}
-	}, [userData, formik]);
+	}, [userData, changed]);
 
 	const handleDelete = async () => {
 		try {
@@ -116,21 +135,21 @@ function Profile() {
 	};
 
 	const handleCancel = () => {
-		formik.resetForm({
-			values: {
-				firstName: user?.name?.first || "",
-				middleName: user?.name?.middle || "",
-				lastName: user?.name?.last || "",
-				email: user?.email || "",
-				dates: user?.dates?.join(", ") || "",
-			},
-		});
+		formik.resetForm();
 		setIsEditing(false);
 	};
 
 	const handleLogout = () => {
 		logout();
 		navigate("/");
+	};
+
+	const handleFileChange = (event) => {
+		const file = event.target.files[0];
+		if (file) {
+			formik.setFieldValue("profilePicture", file);
+			formik.setTouched({ ...formik.touched, profilePicture: true });
+		}
 	};
 
 	return (
@@ -272,6 +291,7 @@ function Profile() {
 										accept="image/*"
 										ref={fileInputRef}
 										className="form-control"
+										onChange={handleFileChange}
 									/>
 								</div>
 							</div>
@@ -324,7 +344,7 @@ function Profile() {
 					{!isEditing && (
 						<div className="profile-view-actions d-flex justify-content-between mt-4">
 							<button
-								className="btn btn-info "
+								className="btn btn-info"
 								style={{
 									width: "90px",
 									height: "40px",
@@ -337,7 +357,7 @@ function Profile() {
 							</button>
 
 							<button
-								className="btn btn-warning "
+								className="btn btn-warning"
 								style={{
 									width: "90px",
 									height: "40px",

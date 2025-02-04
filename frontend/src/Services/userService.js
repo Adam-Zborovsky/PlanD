@@ -97,6 +97,7 @@ export function updateUser(id, user) {
 		url: apiURL + id,
 		headers: {
 			"x-auth-token": localStorage.getItem("token"),
+			"Content-Type": "multipart/form-data",
 		},
 		data: user,
 	};

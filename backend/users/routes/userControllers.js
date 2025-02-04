@@ -109,7 +109,7 @@ router.get("/:id", auth, async (req, res) => {
 	}
 });
 
-router.put("/:id", auth, async (req, res) => {
+router.put("/:id", auth, upload.single("profilePicture"), async (req, res) => {
 	try {
 		const userInfo = req.user;
 		const { id } = req.params;
@@ -122,11 +122,33 @@ router.put("/:id", auth, async (req, res) => {
 				);
 		}
 
-		if (!Object.keys(req.body).length) {
-			return res.status(400).send("No data provided for update");
+		const updateData = {};
+
+		if (req.body.name) {
+			updateData.name = JSON.parse(req.body.name);
 		}
 
-		const updatedUser = await updateUser(id, req.body);
+		if (req.body.email) {
+			updateData.email = req.body.email;
+		}
+
+		if (req.body.dates) {
+			updateData.dates = req.body.dates
+				.split(",")
+				.map((date) => date.trim())
+				.filter((date) => date);
+		}
+
+		if (req.file) {
+			updateData.image = {
+				path: `/uploads/${req.file.filename}`,
+				alt: updateData.name
+					? `${updateData.name.first} ${updateData.name.last}`
+					: "Profile Picture",
+			};
+		}
+
+		const updatedUser = await updateUser(id, updateData);
 		res.status(200).send({ message: "User updated successfully", updatedUser });
 	} catch (error) {
 		handleError(res, error.status || 400, error.message);
