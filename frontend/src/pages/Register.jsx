@@ -66,7 +66,6 @@ function Register() {
 			const file = fileInputRef.current?.files?.[0];
 			if (file) {
 				formData.append("profilePicture", file);
-				console.log(formData.profilePicture);
 			}
 			registerUser(formData)
 				.then((res) => {

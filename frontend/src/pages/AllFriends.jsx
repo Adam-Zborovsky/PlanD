@@ -3,6 +3,7 @@ import { AuthContext } from "../context/AuthContext";
 import { ChangeContext } from "../context/ChangeContext";
 import { getAllUsers, getUser } from "../Services/userService";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 function AllFriends() {
 	const { userData } = useContext(AuthContext);

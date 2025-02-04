@@ -50,7 +50,6 @@ router.post("/", upload.single("profilePicture"), async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
-	console.log(req.body);
 	try {
 		const validateErrorMessage = validateLogin(req.body);
 		if (validateErrorMessage !== "") {

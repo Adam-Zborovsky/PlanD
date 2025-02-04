@@ -13,6 +13,7 @@ import ViewDate from "./pages/ViewDate.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import AllFriends from "./pages/AllFriends.jsx";
 import Admin from "./pages/Admin.jsx";
+import Footer from "./components/Footer.jsx";
 
 function App() {
 	return (
@@ -43,6 +44,7 @@ function App() {
 						<Route path="/admin" element={<Admin />} />
 						<Route path="*" element={<NotFound />} />
 					</Routes>
+					<Footer />
 				</Router>
 			</AuthProvider>
 		</ChangeProvider>

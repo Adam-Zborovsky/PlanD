@@ -46,7 +46,6 @@ const getMostVotedIdea = async (ideas) => {
 				...mostVotedIdea._doc,
 				profileImage: user.image,
 			};
-			console.log(mostVotedIdea);
 		}
 		return mostVotedIdea;
 	} catch (error) {

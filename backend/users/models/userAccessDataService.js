@@ -9,7 +9,6 @@ const User = require("../../users/models/mongodb/User");
 const registerUser = async (newUser) => {
 	try {
 		newUser.password = generatePassword(newUser.password);
-		console.log(newUser);
 
 		let user = new User(newUser);
 		user = await user.save();

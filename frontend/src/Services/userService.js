@@ -30,8 +30,6 @@ export function registerUser(formData) {
 	return axios
 		.request(config)
 		.then((res) => {
-			console.log("res", res);
-
 			if (res.status === 201) {
 				const loginConfig = {
 					method: "post",

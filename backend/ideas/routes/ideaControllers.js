@@ -46,7 +46,6 @@ router.get("/:date", async (req, res) => {
 		if (ideas.length === 0) return res.status(204).send("No ideas found, Yet!");
 
 		let ideasWithProfile = await getIdeas(ideas);
-		console.log(ideasWithProfile);
 
 		res.status(200).send(ideasWithProfile);
 	} catch (error) {
@@ -63,7 +62,6 @@ router.get("/most-voted/:date", async (req, res) => {
 			return res.status(404).send("No ideas found for the given date.");
 
 		const mostVotedIdea = await getMostVotedIdea(ideas);
-		console.log(mostVotedIdea);
 
 		res.status(200).send(mostVotedIdea);
 	} catch (error) {

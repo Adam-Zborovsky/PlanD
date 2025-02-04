@@ -48,9 +48,7 @@ function Home() {
 										[date]: ideaRes.data,
 									}));
 								})
-								.catch((err) => {
-									console.log(err.response?.data);
-								});
+								.catch((err) => console.log(err.response?.data));
 						});
 					}
 				})
@@ -78,7 +76,6 @@ function Home() {
 				userDates.filter((dateItem) => dateItem.originalDate !== date)
 			);
 			change();
-			console.log(userDates.length);
 			if (userDates.length === 1) {
 				setUserDates([]);
 				handleIsHome(false);
@@ -90,10 +87,7 @@ function Home() {
 
 	const handleIsHome = (isHome) => {
 		updateUser(userData._id, { isHome: isHome })
-			.then((res) => {
-				console.log("res", res.data);
-				change();
-			})
+			.then((res) => change())
 			.catch((err) => toast.error(err.response?.data));
 	};
 

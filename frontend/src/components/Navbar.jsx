@@ -1,17 +1,20 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FaBars } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import "../styles/Navbar.css";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 
-const NavBar = () => {
+function NavBar() {
 	const { logout, isAuthenticated, userData } = useContext(AuthContext);
 	const [isOpen, setIsOpen] = useState(false);
 
 	const toggleNav = () => {
 		setIsOpen(!isOpen);
 	};
+
+	useEffect(() => {}, [isAuthenticated]);
+
 	return (
 		<>
 			<div className="navbar">
@@ -29,25 +32,6 @@ const NavBar = () => {
 							Home
 						</Link>
 					</li>
-					<li className="nav-item">
-						<Link
-							className="nav-link"
-							to="/profile"
-							onClick={() => toggleNav()}
-						>
-							Profile
-						</Link>
-					</li>
-
-					<li className="nav-item">
-						<Link
-							className="nav-link"
-							to="/all-friends"
-							onClick={() => toggleNav()}
-						>
-							All Friends
-						</Link>
-					</li>
 
 					{userData.isAdmin && (
 						<li className="nav-item">
@@ -61,18 +45,38 @@ const NavBar = () => {
 						</li>
 					)}
 					{isAuthenticated && (
-						<li className="nav-item">
-							<button
-								className="nav-link"
-								onClick={() => {
-									toggleNav();
-									logout();
-									window.location.reload();
-								}}
-							>
-								Logout
-							</button>
-						</li>
+						<>
+							<li className="nav-item">
+								<Link
+									className="nav-link"
+									to="/profile"
+									onClick={() => toggleNav()}
+								>
+									Profile
+								</Link>
+							</li>
+
+							<li className="nav-item">
+								<Link
+									className="nav-link"
+									to="/all-friends"
+									onClick={() => toggleNav()}
+								>
+									All Friends
+								</Link>
+							</li>
+							<li className="nav-item">
+								<button
+									className="nav-link"
+									onClick={() => {
+										toggleNav();
+										logout();
+									}}
+								>
+									Logout
+								</button>
+							</li>
+						</>
 					)}
 				</ul>
 				<div className="social-links">
@@ -84,6 +88,6 @@ const NavBar = () => {
 			{isOpen && <div className="overlay" onClick={toggleNav}></div>}
 		</>
 	);
-};
+}
 
 export default NavBar;

@@ -28,15 +28,14 @@ export const AuthProvider = ({ children }) => {
 					localStorage.setItem("token", res.data);
 					setUserData(jwtDecode(res.data));
 				})
-				.catch((err) => {
-					console.log(err);
-				});
+				.catch((err) => console.log(err));
 		}
 	}, [changed, userData._id]);
 
 	const login = (token) => {
 		localStorage.setItem("token", token);
 		setUserData(jwtDecode(token));
+		setIsAuthenticated(true);
 		toast.success("Log in successfully");
 	};
 
