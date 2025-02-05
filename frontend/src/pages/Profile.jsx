@@ -154,7 +154,7 @@ function Profile() {
 
 	return (
 		<>
-			<div className="profile-container d-flex justify-content-center align-items-start">
+			<div className="container profile-container d-flex justify-content-center align-items-start">
 				<div className="card profile-card p-4">
 					<div className="profile-header text-center">
 						{user.image?.path ? (
@@ -302,7 +302,7 @@ function Profile() {
 									style={{
 										width: "90px",
 										height: "40px",
-										fontSize: "14px",
+										fontSize: "0.7rem",
 									}}
 									disabled={!(formik.dirty && formik.isValid)}
 								>
@@ -314,9 +314,9 @@ function Profile() {
 									type="button"
 									className="btn btn-secondary"
 									style={{
-										width: "85px",
+										width: "95px",
 										height: "40px",
-										fontSize: "12px",
+										fontSize: "0.7rem",
 									}}
 									onClick={handleCancel}
 								>
@@ -330,7 +330,7 @@ function Profile() {
 									style={{
 										width: "90px",
 										height: "40px",
-										fontSize: "14px",
+										fontSize: "0.7rem",
 									}}
 									onClick={() => setShowConfirm(true)}
 								>

@@ -23,12 +23,11 @@ function AllFriends() {
 	}, [userData._id, changed]);
 
 	return (
-		<div className="container mt-4">
+		<div className="container">
 			{userDates.length > 0 ? (
 				<table
 					className="table table-borderless"
 					style={{
-						marginTop: "10vh",
 						"--bs-table-color": "var(--color-text)",
 						"--bs-table-bg": "var(--color-surface)",
 						"--bs-table-border-color": "var(--color-border)",
@@ -117,10 +116,7 @@ function AllFriends() {
 					</tbody>
 				</table>
 			) : (
-				<div
-					className="container d-flex flex-column align-items-center"
-					style={{ marginTop: "10vh" }}
-				>
+				<div className="container d-flex flex-column align-items-center">
 					<h1>Add a date to see your friends!</h1>
 					<Link to="/">Go to Home</Link>
 				</div>

@@ -11,12 +11,14 @@
 html,
 body {
 	margin: 0;
-	padding: 0;
 	font-family: var(--font-family-base) !important;
 	background-color: var(--color-bg) !important;
 	color: var(--color-text) !important;
 }
-
+.container {
+	padding-top: 75px;
+	padding-bottom: 50px;
+}
 textarea {
 	background-color: var(--color-bg) !important;
 	border: var(--color-border) !important;

@@ -43,7 +43,10 @@ function Login() {
 	});
 
 	return (
-		<div className="login-container d-flex justify-content-center align-items-start" style={{ marginTop: "10vh", gap: "5vh" }}>
+		<div
+			className="login-container d-flex justify-content-center align-items-start"
+			style={{ gap: "5vh" }}
+		>
 			<div className="card login-card">
 				<h3 className="text-center mb-4">Login</h3>
 
@@ -56,8 +59,9 @@ function Login() {
 							id="email"
 							name="email"
 							type="email"
-							className={`form-control ${formik.touched.email && formik.errors.email ? "is-invalid" : ""
-								}`}
+							className={`form-control ${
+								formik.touched.email && formik.errors.email ? "is-invalid" : ""
+							}`}
 							placeholder="name@example.com"
 							value={formik.values.email}
 							onChange={formik.handleChange}
@@ -76,10 +80,11 @@ function Login() {
 							id="password"
 							name="password"
 							type="password"
-							className={`form-control ${formik.touched.password && formik.errors.password
-								? "is-invalid"
-								: ""
-								}`}
+							className={`form-control ${
+								formik.touched.password && formik.errors.password
+									? "is-invalid"
+									: ""
+							}`}
 							placeholder="Enter your password"
 							value={formik.values.password}
 							onChange={formik.handleChange}

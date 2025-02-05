@@ -101,7 +101,7 @@ function Home() {
 	return (
 		<div
 			className="container d-flex flex-column align-items-center"
-			style={{ height: "100vh", marginTop: "10vh", gap: "5vh" }}
+			style={{ height: "100vh", gap: "5vh" }}
 		>
 			{userDates.length === 0 ? (
 				<>

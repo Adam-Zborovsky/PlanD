@@ -134,10 +134,7 @@ function Admin() {
 
 	if (!userData.isAdmin) {
 		return (
-			<div
-				className="container d-flex flex-column align-items-center"
-				style={{ marginTop: "10vh" }}
-			>
+			<div className="container d-flex flex-column align-items-center">
 				<h1>Must Be Admin</h1>
 				<Link to="/">Go to Home</Link>
 			</div>
@@ -217,10 +214,7 @@ function Admin() {
 	};
 
 	return (
-		<div
-			className="container d-flex flex-column align-items-center justify-content-center"
-			style={{ marginTop: "10vh" }}
-		>
+		<div className="container d-flex flex-column align-items-center justify-content-center">
 			<button className="btn btn-primary mb-3" onClick={toggleView}>
 				{viewMode === "users" ? "Switch to Ideas" : "Switch to Users"}
 			</button>
