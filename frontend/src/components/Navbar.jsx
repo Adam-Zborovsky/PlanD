@@ -33,17 +33,6 @@ function NavBar() {
 						</Link>
 					</li>
 
-					{userData.isAdmin && (
-						<li className="nav-item">
-							<Link
-								className="nav-link"
-								to="/admin"
-								onClick={() => toggleNav()}
-							>
-								Admin
-							</Link>
-						</li>
-					)}
 					{isAuthenticated && (
 						<>
 							<li className="nav-item">
@@ -65,6 +54,17 @@ function NavBar() {
 									All Friends
 								</Link>
 							</li>
+							{userData.isAdmin && (
+								<li className="nav-item">
+									<Link
+										className="nav-link"
+										to="/admin"
+										onClick={() => toggleNav()}
+									>
+										Admin
+									</Link>
+								</li>
+							)}
 							<li className="nav-item">
 								<button
 									className="nav-link"
@@ -80,9 +80,7 @@ function NavBar() {
 					)}
 				</ul>
 				<div className="social-links">
-					<span>Facebook</span>
-					<span>Instagram</span>
-					<span>Twitter</span>
+					<span>©Adam Zborovsky</span>
 				</div>
 			</div>
 			{isOpen && <div className="overlay" onClick={toggleNav}></div>}

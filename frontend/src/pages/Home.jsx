@@ -54,7 +54,7 @@ function Home() {
 				})
 				.catch((err) => toast.error(err.response?.data));
 		}
-	}, [isAuthenticated, userData._id, changed]);
+	}, [changed, isAuthenticated, userData._id]);
 
 	const formatDate = (isoString) => {
 		const date = new Date(isoString);
@@ -86,7 +86,9 @@ function Home() {
 	};
 
 	const handleIsHome = (isHome) => {
-		updateUser(userData._id, { isHome: isHome })
+		const formData = new FormData();
+		formData.append("isHome", isHome);
+		updateUser(userData._id, formData)
 			.then((res) => change())
 			.catch((err) => toast.error(err.response?.data));
 	};
@@ -101,7 +103,34 @@ function Home() {
 			className="container d-flex flex-column align-items-center"
 			style={{ height: "100vh", marginTop: "10vh", gap: "5vh" }}
 		>
-			{isAuthenticated && userDates.length > 0 ? (
+			{userDates.length === 0 ? (
+				<>
+					<div className="text-center">
+						<button
+							className="btn btn-primary btn-lg mb-3 w-75"
+							onClick={() => {
+								handleIsHome(true);
+								setShowCalender(true);
+							}}
+						>
+							I am Home
+						</button>
+						<button
+							className="btn btn-outline-light btn-lg w-75"
+							onClick={() => {
+								handleIsHome(false);
+								setShowCalender(true);
+							}}
+						>
+							Just Browsing
+						</button>
+					</div>
+					<CalenderModal
+						showModal={showCalender}
+						setShowModal={setShowCalender}
+					/>
+				</>
+			) : (
 				<>
 					<div
 						className="text-center p-3"
@@ -207,33 +236,6 @@ function Home() {
 						show={showImageModal}
 						onHide={() => setShowImageModal(false)}
 						imageUrl={selectedImageUrl}
-					/>
-				</>
-			) : (
-				<>
-					<div className="text-center">
-						<button
-							className="btn btn-primary btn-lg mb-3 w-75"
-							onClick={() => {
-								handleIsHome(true);
-								setShowCalender(true);
-							}}
-						>
-							I am Home
-						</button>
-						<button
-							className="btn btn-outline-light btn-lg w-75"
-							onClick={() => {
-								handleIsHome(false);
-								setShowCalender(true);
-							}}
-						>
-							Just Browsing
-						</button>
-					</div>
-					<CalenderModal
-						showModal={showCalender}
-						setShowModal={setShowCalender}
 					/>
 				</>
 			)}

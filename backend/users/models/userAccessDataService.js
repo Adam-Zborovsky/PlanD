@@ -19,6 +19,26 @@ const registerUser = async (newUser) => {
 	}
 };
 
+const loginUser = async (email, password) => {
+	try {
+		const userFromBD = await User.findOne({ email });
+		if (!userFromBD) {
+			const error = new Error("User not exsist. Please register");
+			error.status = 401;
+			createError("Authentication", error);
+		}
+		if (!comparePasswords(password, userFromBD.password)) {
+			const error = Error("Password Missmatch");
+			error.status = 401;
+			createError("Authentication", error);
+		}
+		const token = generateAuthToken(userFromBD);
+		return token;
+	} catch (error) {
+		createError("Mongoose", error);
+	}
+};
+
 const getAllUsers = async () => {
 	try {
 		let users = await User.find().select("-password");
@@ -55,26 +75,6 @@ const getUser = async (UserId) => {
 	}
 };
 
-const loginUser = async (email, password) => {
-	try {
-		const userFromBD = await User.findOne({ email });
-		if (!userFromBD) {
-			const error = new Error("User not exsist. Please register");
-			error.status = 401;
-			createError("Authentication", error);
-		}
-		if (!comparePasswords(password, userFromBD.password)) {
-			const error = Error("Password Missmatch");
-			error.status = 401;
-			createError("Authentication", error);
-		}
-		const token = generateAuthToken(userFromBD);
-		return token;
-	} catch (error) {
-		createError("Mongoose", error);
-	}
-};
-
 const updateUser = async (id, updateData) => {
 	try {
 		const user = await User.findByIdAndUpdate(
@@ -82,6 +82,7 @@ const updateUser = async (id, updateData) => {
 			{ $set: updateData },
 			{ new: true, runValidators: true }
 		);
+		console.log(user);
 
 		if (!user) {
 			throw { status: 404, message: "User not found" };

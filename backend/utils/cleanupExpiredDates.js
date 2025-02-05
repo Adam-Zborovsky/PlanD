@@ -29,7 +29,4 @@ async function cleanupExpiredDates() {
 	}
 }
 
-setInterval(cleanupExpiredDates, 24 * 60 * 60 * 1000);
-cleanupExpiredDates();
-
 module.exports = cleanupExpiredDates;

@@ -12,6 +12,7 @@ const { loggerMiddleware } = require("./logger/loggerService");
 const path = require("path");
 
 const cleanupExpiredDates = require("./utils/cleanupExpiredDates");
+setInterval(cleanupExpiredDates, 24 * 60 * 60 * 1000);
 cleanupExpiredDates();
 
 const app = express();
