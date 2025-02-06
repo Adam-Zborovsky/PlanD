@@ -13,7 +13,9 @@ async function cleanupExpiredDates() {
 		const users = await User.find({ "dates.0": { $exists: true } });
 		for (let user of users) {
 			user.dates = user.dates.filter((date) => !isDateExpired(date));
-			user.isHome = false;
+			if (user.dates.length === 0) {
+				user.isHome = false;
+			}
 			await user.save();
 		}
 
