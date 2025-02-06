@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { ChangeContext } from "../context/ChangeContext";
 import { updateUser } from "../Services/userService";
 import ImageModal from "../components/ImageModal";
+import { TiPlus } from "react-icons/ti";
 
 function Home() {
 	const { userData, isAuthenticated } = useContext(AuthContext);
@@ -125,10 +126,6 @@ function Home() {
 							Just Browsing
 						</button>
 					</div>
-					<CalenderModal
-						showModal={showCalender}
-						setShowModal={setShowCalender}
-					/>
 				</>
 			) : (
 				<>
@@ -224,21 +221,28 @@ function Home() {
 							);
 						})}
 					</div>
-
-					<ConfirmModal
-						isOpen={showConfirm}
-						onClose={() => setShowConfirm(false)}
-						action={action}
-						title={message[0]}
-						message={message[1]}
-					/>
-					<ImageModal
-						show={showImageModal}
-						onHide={() => setShowImageModal(false)}
-						imageUrl={selectedImageUrl}
-					/>
+					<button
+						className="btn btn-outline-primary"
+						style={{ borderRadius: "10px" }}
+						onClick={() => setShowCalender(true)}
+					>
+						<TiPlus size={25} />
+					</button>
 				</>
 			)}
+			<CalenderModal showModal={showCalender} setShowModal={setShowCalender} />
+			<ConfirmModal
+				isOpen={showConfirm}
+				onClose={() => setShowConfirm(false)}
+				action={action}
+				title={message[0]}
+				message={message[1]}
+			/>
+			<ImageModal
+				show={showImageModal}
+				onHide={() => setShowImageModal(false)}
+				imageUrl={selectedImageUrl}
+			/>
 		</div>
 	);
 }

@@ -69,6 +69,7 @@ router.delete("/:userId", auth, async (req, res) => {
 		if (!user) return res.status(404).send("User not found");
 
 		user.dates = user.dates.filter((date) => date !== dateToDel);
+		if (user.dates.length === 0) user.isHome = false;
 		await user.save();
 
 		res.status(200).send(user.dates);
