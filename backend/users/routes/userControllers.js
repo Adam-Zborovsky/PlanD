@@ -124,19 +124,14 @@ router.put("/:id", auth, upload.single("profilePicture"), async (req, res) => {
 		const updateData = {};
 
 		if (req.body.name) {
-			console.log(req.body.name);
 			updateData.name = JSON.parse(req.body.name);
 		}
 
 		if (req.body.email) {
-			console.log(req.body.email);
-
 			updateData.email = req.body.email;
 		}
 
 		if (req.body.dates) {
-			console.log(req.body.dates);
-
 			updateData.dates = req.body.dates
 				.split(",")
 				.map((date) => date.trim())
@@ -152,7 +147,6 @@ router.put("/:id", auth, upload.single("profilePicture"), async (req, res) => {
 			};
 		}
 		if (req.body.isHome) {
-			console.log(req.body.isHome);
 			updateData.isHome = req.body.isHome;
 		}
 
