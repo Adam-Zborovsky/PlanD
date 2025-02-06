@@ -44,7 +44,7 @@ function Login() {
 
 	return (
 		<div
-			className="login-container d-flex justify-content-center align-items-start"
+			className="container login-container d-flex justify-content-center align-items-start"
 			style={{ gap: "5vh" }}
 		>
 			<div className="card login-card">
