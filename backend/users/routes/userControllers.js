@@ -16,6 +16,7 @@ const {
 } = require("../validation/userValidationService");
 const upload = require("../../middlewares/firebaseMulter");
 const { uploadToFirebase } = require("../../utils/firebaseUpload");
+const { deleteFromFirebase } = require("../../utils/firebaseDelete");
 const path = require("path");
 const router = express.Router();
 
@@ -28,8 +29,12 @@ router.post("/", upload.single("profilePicture"), async (req, res) => {
 		};
 
 		const validateErrorMessage = validateRegistration(userData);
-		if (validateErrorMessage) {
-			return handleError(res, 400, `Validation: ${validateErrorMessage}`);
+		if (validateErrorMessage.error) {
+			return handleError(
+				res,
+				400,
+				`Validation: ${validateErrorMessage.error.message}`
+			);
 		}
 
 		if (req.file) {
@@ -42,7 +47,7 @@ router.post("/", upload.single("profilePicture"), async (req, res) => {
 			};
 		} else {
 			userData.image = {
-				path: "https://storage.googleapis.com/your-default-bucket/default.webp",
+				path: "https://freesvg.org/img/abstract-user-flat-4.png",
 				alt: "Default",
 			};
 		}
@@ -154,6 +159,11 @@ router.put("/:id", auth, upload.single("profilePicture"), async (req, res) => {
 					? `${updateData.name.first} ${updateData.name.last}`
 					: "Profile Picture",
 			};
+		} else if (!updateData.image) {
+			updateData.image = {
+				path: "https://freesvg.org/img/abstract-user-flat-4.png",
+				alt: "Default",
+			};
 		}
 
 		if (req.body.isHome) {
@@ -170,9 +180,21 @@ router.put("/:id", auth, upload.single("profilePicture"), async (req, res) => {
 router.delete("/:id", auth, async (req, res) => {
 	try {
 		const { id } = req.params;
+		const user = await getUser(id);
+		if (!user) {
+			return handleError(res, 404, "User not found");
+		}
+		if (
+			user.image &&
+			user.image.path &&
+			user.image.path !== "https://freesvg.org/img/abstract-user-flat-4.png"
+		) {
+			await deleteFromFirebase(user.image.path);
+		}
 		const deletedUser = await deleteUser(id);
 		res.status(200).send(deletedUser);
 	} catch (error) {
+		console.error("Error deleting user:", error);
 		handleError(res, error.status || 400, error.message);
 	}
 });
