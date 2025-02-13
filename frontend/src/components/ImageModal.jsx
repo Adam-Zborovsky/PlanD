@@ -16,10 +16,8 @@ function ImageModal({ show, onHide, imageUrl }) {
 					alt="Profile"
 					className="rounded-circle"
 					style={{
-						maxWidth: "300px",
-						maxHeight: "300px",
-						width: "auto",
-						height: "auto",
+						width: "200px",
+						height: "200px",
 						objectFit: "cover",
 					}}
 				/>

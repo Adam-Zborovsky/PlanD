@@ -17,6 +17,7 @@ export function loginUser(user) {
 }
 
 export function registerUser(formData) {
+	console.log(apiURL);
 	const config = {
 		method: "post",
 		maxBodyLength: Infinity,

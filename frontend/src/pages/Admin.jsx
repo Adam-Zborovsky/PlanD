@@ -199,7 +199,7 @@ function Admin() {
 	};
 
 	const handleImageClick = (imagePath) => {
-		setSelectedImageUrl(`${process.env.REACT_APP_API_URL}${imagePath}`);
+		setSelectedImageUrl(imagePath);
 		setShowImageModal(true);
 	};
 
@@ -244,7 +244,7 @@ function Admin() {
 									>
 										{user.image && user.image.path && (
 											<img
-												src={`${process.env.REACT_APP_API_URL}${user.image.path}`}
+												src={user.image.path}
 												alt={user.image.alt || "User profile"}
 												className="rounded-circle mb-3 cursor-pointer"
 												style={{

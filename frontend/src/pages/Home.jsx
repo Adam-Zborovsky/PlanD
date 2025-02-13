@@ -96,7 +96,7 @@ function Home() {
 
 	const handleImageClick = (imagePath, e) => {
 		e.stopPropagation();
-		setSelectedImageUrl(`${process.env.REACT_APP_API_URL}${imagePath}`);
+		setSelectedImageUrl(imagePath);
 		setShowImageModal(true);
 	};
 	return (
@@ -177,7 +177,7 @@ function Home() {
 													<h6 className="text-primary">Most Voted Idea</h6>
 													<div className="d-flex flex-row align-items-center justify-content-center">
 														<img
-															src={`${process.env.REACT_APP_API_URL}${idea.profileImage.path}`}
+															src={idea.profileImage.path}
 															alt={idea.profileImage.alt}
 															className="rounded-circle "
 															style={{

@@ -159,7 +159,7 @@ function Profile() {
 					<div className="profile-header text-center">
 						{user.image?.path ? (
 							<img
-								src={`${process.env.REACT_APP_API_URL}${user.image.path}`}
+								src={user.image.path}
 								alt={user.image.alt}
 								className="profile-picture mb-3"
 							/>

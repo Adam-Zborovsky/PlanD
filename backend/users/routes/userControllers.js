@@ -14,7 +14,9 @@ const {
 	validateRegistration,
 	validateLogin,
 } = require("../validation/userValidationService");
-const upload = require("../../middlewares/multer");
+const upload = require("../../middlewares/firebaseMulter");
+const { uploadToFirebase } = require("../../utils/firebaseUpload");
+const path = require("path");
 const router = express.Router();
 
 router.post("/", upload.single("profilePicture"), async (req, res) => {
@@ -29,14 +31,18 @@ router.post("/", upload.single("profilePicture"), async (req, res) => {
 		if (validateErrorMessage) {
 			return handleError(res, 400, `Validation: ${validateErrorMessage}`);
 		}
+
 		if (req.file) {
+			const ext = path.extname(req.file.originalname);
+			const fileName = `${req.body.email}${ext}`;
+			const publicUrl = await uploadToFirebase(req.file, fileName);
 			userData.image = {
-				path: `/uploads/${req.file.filename}`,
+				path: publicUrl,
 				alt: `${userData.name.first} ${userData.name.last}`,
 			};
 		} else {
 			userData.image = {
-				path: "/uploads/default.webp",
+				path: "https://storage.googleapis.com/your-default-bucket/default.webp",
 				alt: "Default",
 			};
 		}
@@ -139,13 +145,17 @@ router.put("/:id", auth, upload.single("profilePicture"), async (req, res) => {
 		}
 
 		if (req.file) {
+			const ext = path.extname(req.file.originalname);
+			const fileName = `${req.body.email}${ext}`;
+			const publicUrl = await uploadToFirebase(req.file, fileName);
 			updateData.image = {
-				path: `/uploads/${req.file.filename}`,
+				path: publicUrl,
 				alt: updateData.name
 					? `${updateData.name.first} ${updateData.name.last}`
 					: "Profile Picture",
 			};
 		}
+
 		if (req.body.isHome) {
 			updateData.isHome = req.body.isHome;
 		}

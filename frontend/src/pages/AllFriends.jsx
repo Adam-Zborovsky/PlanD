@@ -88,7 +88,7 @@ function AllFriends() {
 															className="d-flex align-items-center mb-2"
 														>
 															<img
-																src={`${process.env.REACT_APP_API_URL}${user.image.path}`}
+																src={user.image.path}
 																alt={user.image.alt}
 																width="35"
 																height="35"

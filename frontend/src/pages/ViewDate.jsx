@@ -63,7 +63,7 @@ function ViewDate() {
 	};
 
 	const handleImageClick = (imagePath) => {
-		setSelectedImageUrl(`${process.env.REACT_APP_API_URL}${imagePath}`);
+		setSelectedImageUrl(imagePath);
 		setShowImageModal(true);
 	};
 
@@ -110,7 +110,7 @@ function ViewDate() {
 								<div className="d-flex align-items-center gap-3 mb-3">
 									<div className="d-flex align-items-center gap-1">
 										<img
-											src={`${process.env.REACT_APP_API_URL}${idea.profileImage.path}`}
+											src={idea.profileImage.path}
 											alt={idea.profileImage.alt}
 											className="rounded-circle"
 											style={{

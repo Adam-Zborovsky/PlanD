@@ -1,15 +1,12 @@
 require("dotenv").config();
 
-const mongoose = require("mongoose");
 const express = require("express");
-const cors = require("cors");
 const connectToDB = require("./DB/dbService");
 const router = require("./router/router");
 const corsMiddleware = require("./middlewares/cors");
+const { loggerMiddleware } = require("./logger/loggerService");
 const { handleError } = require("./utils/handleErrors");
 const chalk = require("chalk");
-const { loggerMiddleware } = require("./logger/loggerService");
-const path = require("path");
 
 const cleanupExpiredDates = require("./utils/cleanupExpiredDates");
 setInterval(cleanupExpiredDates, 24 * 60 * 60 * 1000);
@@ -23,8 +20,6 @@ app.use(express.json());
 
 app.use(loggerMiddleware());
 
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-
 app.use(router);
 
 app.use((err, req, res, next) => {
@@ -33,6 +28,6 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, () => {
-	console.log(chalk.bgGreen.green("Server lisening to port " + PORT));
+	console.log(chalk.bgGreen.green("Server listening to port " + PORT));
 	connectToDB();
 });
