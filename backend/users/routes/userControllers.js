@@ -159,11 +159,6 @@ router.put("/:id", auth, upload.single("profilePicture"), async (req, res) => {
 					? `${updateData.name.first} ${updateData.name.last}`
 					: "Profile Picture",
 			};
-		} else if (!updateData.image) {
-			updateData.image = {
-				path: "https://freesvg.org/img/abstract-user-flat-4.png",
-				alt: "Default",
-			};
 		}
 
 		if (req.body.isHome) {
