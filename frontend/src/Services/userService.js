@@ -1,4 +1,5 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 
 const apiURL = process.env.REACT_APP_API_URL + "/users/";
 
@@ -71,7 +72,7 @@ export function getToken(id) {
 		maxBodyLength: Infinity,
 		url: apiURL + "token/" + id,
 		headers: {
-			"x-auth-token": localStorage.getItem("token"),
+			"x-auth-token": Cookies.get("token"),
 		},
 	};
 	return axios.request(config);
@@ -83,7 +84,7 @@ export function getUser(id) {
 		maxBodyLength: Infinity,
 		url: apiURL + id,
 		headers: {
-			"x-auth-token": localStorage.getItem("token"),
+			"x-auth-token": Cookies.get("token"),
 		},
 	};
 	return axios.request(config);
@@ -95,7 +96,7 @@ export function updateUser(id, user) {
 		maxBodyLength: Infinity,
 		url: apiURL + id,
 		headers: {
-			"x-auth-token": localStorage.getItem("token"),
+			"x-auth-token": Cookies.get("token"),
 			"Content-Type": "multipart/form-data",
 		},
 		data: user,
@@ -109,7 +110,7 @@ export function deleteUser(id) {
 		maxBodyLength: Infinity,
 		url: apiURL + id,
 		headers: {
-			"x-auth-token": localStorage.getItem("token"),
+			"x-auth-token": Cookies.get("token"),
 		},
 	};
 	return axios.request(config);

@@ -9,6 +9,7 @@ import { FaEdit, FaSignOutAlt, FaSave, FaTimes, FaTrash } from "react-icons/fa";
 import { toast } from "react-toastify";
 import ConfirmModal from "../components/ConfirmModal";
 import "../styles/Profile.css";
+import Cookies from "js-cookie";
 
 function Profile() {
 	const { userData, logout, isAuthenticated } = useContext(AuthContext);
@@ -28,7 +29,7 @@ function Profile() {
 
 	useEffect(() => {
 		if (!isAuthenticated) {
-			const token = localStorage.getItem("token");
+			const token = Cookies.get("token");
 			if (!token) {
 				navigate("/login");
 			}

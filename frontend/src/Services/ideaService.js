@@ -1,4 +1,5 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 
 const apiURL = process.env.REACT_APP_API_URL + "/ideas/";
 
@@ -8,7 +9,7 @@ export function addIdea(id, data) {
 		maxBodyLength: Infinity,
 		url: apiURL + id,
 		headers: {
-			"x-auth-token": localStorage.getItem("token"),
+			"x-auth-token": Cookies.get("token"),
 		},
 		data: data,
 	};
@@ -22,7 +23,7 @@ export function getIdeas(date) {
 		maxBodyLength: Infinity,
 		url: apiURL + date,
 		headers: {
-			"x-auth-token": localStorage.getItem("token"),
+			"x-auth-token": Cookies.get("token"),
 		},
 	};
 	return axios.request(config);
@@ -42,7 +43,7 @@ export function getMostVotedIdea(date) {
 		maxBodyLength: Infinity,
 		url: apiURL + "most-voted/" + date,
 		headers: {
-			"x-auth-token": localStorage.getItem("token"),
+			"x-auth-token": Cookies.get("token"),
 		},
 	};
 	return axios.request(config);
@@ -54,7 +55,7 @@ export function voteForIdea(id) {
 		maxBodyLength: Infinity,
 		url: apiURL + id + "/vote",
 		headers: {
-			"x-auth-token": localStorage.getItem("token"),
+			"x-auth-token": Cookies.get("token"),
 		},
 	};
 	return axios.request(config);
@@ -66,7 +67,7 @@ export function updateIdea(id, idea) {
 		maxBodyLength: Infinity,
 		url: apiURL + id,
 		headers: {
-			"x-auth-token": localStorage.getItem("token"),
+			"x-auth-token": Cookies.get("token"),
 		},
 		data: idea,
 	};
@@ -79,7 +80,7 @@ export function deleteIdea(id) {
 		maxBodyLength: Infinity,
 		url: apiURL + id,
 		headers: {
-			"x-auth-token": localStorage.getItem("token"),
+			"x-auth-token": Cookies.get("token"),
 		},
 	};
 	return axios.request(config);

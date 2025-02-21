@@ -3,6 +3,7 @@ import { createContext, useState, useEffect, useContext } from "react";
 import { toast } from "react-toastify";
 import { ChangeContext } from "./ChangeContext";
 import { getToken } from "../Services/userService";
+import Cookies from "js-cookie";
 
 export const AuthContext = createContext();
 
@@ -12,7 +13,7 @@ export const AuthProvider = ({ children }) => {
 	const [userData, setUserData] = useState({});
 
 	useEffect(() => {
-		const token = localStorage.getItem("token");
+		const token = Cookies.get("token");
 		if (token) {
 			setIsAuthenticated(true);
 			setUserData(jwtDecode(token));
@@ -25,7 +26,11 @@ export const AuthProvider = ({ children }) => {
 		if (userData._id) {
 			getToken(userData._id)
 				.then((res) => {
-					localStorage.setItem("token", res.data);
+					Cookies.set("token", res.data, {
+						expires: 14,
+						secure: true,
+						sameSite: "strict",
+					});
 					setUserData(jwtDecode(res.data));
 				})
 				.catch((err) => console.log(err));
@@ -33,14 +38,18 @@ export const AuthProvider = ({ children }) => {
 	}, [changed, userData._id]);
 
 	const login = (token) => {
-		localStorage.setItem("token", token);
+		Cookies.set("token", token, {
+			expires: 14,
+			secure: true,
+			sameSite: "strict",
+		});
 		setUserData(jwtDecode(token));
 		setIsAuthenticated(true);
 		toast.success("Log in successfully");
 	};
 
 	const logout = () => {
-		localStorage.removeItem("token");
+		Cookies.remove("token");
 		setIsAuthenticated(false);
 		setUserData({});
 		toast.success("Log out successfully");

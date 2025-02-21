@@ -11,6 +11,7 @@ import { ChangeContext } from "../context/ChangeContext";
 import { updateUser } from "../Services/userService";
 import ImageModal from "../components/ImageModal";
 import { TiPlus } from "react-icons/ti";
+import Cookies from "js-cookie";
 
 function Home() {
 	const { userData, isAuthenticated } = useContext(AuthContext);
@@ -27,7 +28,7 @@ function Home() {
 
 	useEffect(() => {
 		if (!isAuthenticated) {
-			const token = localStorage.getItem("token");
+			const token = Cookies.get("token");
 			if (!token) {
 				navigate("/login");
 			}

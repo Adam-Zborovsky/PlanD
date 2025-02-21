@@ -1,4 +1,5 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 
 const apiURL = process.env.REACT_APP_API_URL + "/dates/";
 
@@ -8,7 +9,7 @@ export function addDate(id, date) {
 		maxBodyLength: Infinity,
 		url: apiURL + id,
 		headers: {
-			"x-auth-token": localStorage.getItem("token"),
+			"x-auth-token": Cookies.get("token"),
 		},
 		data: { date },
 	};
@@ -21,7 +22,7 @@ export function getDates(id) {
 		maxBodyLength: Infinity,
 		url: apiURL + id,
 		headers: {
-			"x-auth-token": localStorage.getItem("token"),
+			"x-auth-token": Cookies.get("token"),
 		},
 	};
 	return axios.request(config);
@@ -33,7 +34,7 @@ export function deleteDate(id, date) {
 		maxBodyLength: Infinity,
 		url: apiURL + id,
 		headers: {
-			"x-auth-token": localStorage.getItem("token"),
+			"x-auth-token": Cookies.get("token"),
 		},
 		data: { date },
 	};
