@@ -19,10 +19,13 @@ async function cleanupExpiredDates() {
 			await user.save();
 		}
 
-		const ideas = await Idea.find({ "dates.0": { $exists: true } });
+		const ideas = await Idea.find();
+
 		for (let idea of ideas) {
-			idea.dates = idea.dates.filter((date) => !isDateExpired(date));
-			await idea.save();
+			if (isDateExpired(idea.date)) {
+				const deletedIdea = await Idea.findByIdAndDelete(idea._id);
+				console.log("Deleted expired idea:", deletedIdea);
+			}
 		}
 
 		console.log("Expired dates cleanup completed successfully.");
