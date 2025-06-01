@@ -4,6 +4,8 @@
 
 The Fix Project is a mobile-first web application designed for users to mark their availability and participate in group activity planning. It is built with React for the frontend and Node.js with MongoDB (Atlas) for the backend.
 
+##Live On: https://pland.onrender.com
+
 ## Features
 
 - **User Authentication**: Users can sign up and log in.
