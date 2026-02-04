@@ -44,7 +44,9 @@ Make sure you have the following installed:
    JWT_SECRET=your_jwt_secret
    PORT=5000
    ```
-4. Start the backend server:
+4. Add IP address to CORS:
+   In backend -> middlewares -> cors.js
+5. Start the backend server:
    ```sh
    npm start
    ```
