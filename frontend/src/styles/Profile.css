@@ -1,0 +1,65 @@
+.profile-container {
+	width: 85%;
+	margin: 0 auto;
+	background-color: var(--color-bg);
+}
+
+.profile-card {
+	background-color: var(--color-surface);
+	color: var(--color-text);
+	max-width: 600px;
+	width: 100%;
+	border-radius: 8px;
+	border: 1px solid var(--color-border);
+}
+
+.profile-header {
+	margin-bottom: 1rem;
+}
+
+.profile-picture {
+	width: 120px;
+	height: 120px;
+	object-fit: cover;
+	border-radius: 50%;
+	border: 3px solid var(--color-primary);
+}
+
+.profile-picture-placeholder {
+	display: inline-flex;
+	width: 120px;
+	height: 120px;
+	border-radius: 50%;
+	border: 3px dashed var(--color-border);
+	align-items: center;
+	justify-content: center;
+	color: var(--color-border);
+}
+
+.profile-name {
+	margin-bottom: 0.5rem;
+}
+
+.profile-email {
+	margin-bottom: 0.5rem;
+	color: var(--color-accent);
+}
+
+.profile-form {
+	margin-top: 1rem;
+}
+
+.form-section {
+	margin-bottom: 1rem;
+}
+
+.error-message {
+	color: red;
+	margin-top: 0.25rem;
+	font-size: 0.85rem;
+}
+
+.profile-edit-actions,
+.profile-view-actions {
+	margin-top: 2rem;
+}
